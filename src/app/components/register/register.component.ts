@@ -18,15 +18,56 @@ export class RegisterComponent {
   telefono?: string;
   fechaNacimiento?: Date;
 
+  nameError: boolean = false;
+  usernameError: boolean = false;
+  emailError: boolean = false;
+  passwordError: boolean = false;
+  confirmPasswordError: boolean = false;
+  confirmPasswordMismatch: boolean = false;
+
+  validateName() {
+    this.nameError = !this.name.trim();
+  }
+
+  validateUsername() {
+    this.usernameError = !this.username.trim();
+  }
+
+  validateEmail() {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    this.emailError = !this.email.trim() || !emailPattern.test(this.email);
+  }
+
+  validatePassword() {
+    this.passwordError = !this.password;
+    this.validateConfirmPassword();
+  }
+
+  validateConfirmPassword() {
+    this.confirmPasswordError = !this.confirmPassword;
+    this.confirmPasswordMismatch =
+      !!this.password &&
+      !!this.confirmPassword &&
+      this.password !== this.confirmPassword;
+  }
+
   onSubmit() {
-    console.log('Datos del registro:', {
-      name: this.name,
-      username: this.username,
-      email: this.email,
-      password: this.password,
-      confirmPassword: this.confirmPassword,
-      telefono: this.telefono,
-      fechaNacimiento: this.fechaNacimiento,
-    });
+    this.validateName();
+    this.validateUsername();
+    this.validateEmail();
+    this.validatePassword();
+    this.validateConfirmPassword();
+
+    if (
+      this.nameError ||
+      this.usernameError ||
+      this.emailError ||
+      this.passwordError ||
+      this.confirmPasswordError ||
+      this.confirmPasswordMismatch
+    ) {
+      return;
+    }
+    // Aquí iría la lógica para enviar los datos al servicio backend
   }
 }

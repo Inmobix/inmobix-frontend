@@ -6,7 +6,7 @@
       Crear Cuenta
     </h2>
 
-    <form class="space-y-6" (ngSubmit)="onSubmit()">
+    <form class="space-y-4" (ngSubmit)="onSubmit()">
       <!-- Nombre -->
       <div>
         <label for="name" class="block text-gray-700 font-medium mb-2"
@@ -17,12 +17,17 @@
           id="name"
           [(ngModel)]="name"
           name="name"
+          (blur)="validateName()"
           placeholder="Tu nombre"
           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none placeholder-gray-400"
+          [class.border-red-500]="nameError"
         />
+        <p *ngIf="nameError" class="text-red-500 text-sm mt-1">
+          El nombre es obligatorio
+        </p>
       </div>
 
-      <!-- Nombre de usuario -->
+      <!-- Username -->
       <div>
         <label for="username" class="block text-gray-700 font-medium mb-2"
           >Nombre de usuario</label
@@ -32,12 +37,17 @@
           id="username"
           [(ngModel)]="username"
           name="username"
+          (blur)="validateUsername()"
           placeholder="Tu usuario"
           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none placeholder-gray-400"
+          [class.border-red-500]="usernameError"
         />
+        <p *ngIf="usernameError" class="text-red-500 text-sm mt-1">
+          El usuario es obligatorio
+        </p>
       </div>
 
-      <!-- Correo electrónico -->
+      <!-- Email -->
       <div>
         <label for="email" class="block text-gray-700 font-medium mb-2"
           >Correo electrónico</label
@@ -47,9 +57,14 @@
           id="email"
           [(ngModel)]="email"
           name="email"
+          (blur)="validateEmail()"
           placeholder="Ingresa tu email"
           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none placeholder-gray-400"
+          [class.border-red-500]="emailError"
         />
+        <p *ngIf="emailError" class="text-red-500 text-sm mt-1">
+          Correo obligatorio
+        </p>
       </div>
 
       <!-- Contraseña -->
@@ -62,9 +77,14 @@
           id="password"
           [(ngModel)]="password"
           name="password"
+          (blur)="validatePassword()"
           placeholder="Ingresa tu contraseña"
           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none placeholder-gray-400"
+          [class.border-red-500]="passwordError"
         />
+        <p *ngIf="passwordError" class="text-red-500 text-sm mt-1">
+          La contraseña es obligatoria
+        </p>
       </div>
 
       <!-- Confirmar Contraseña -->
@@ -79,12 +99,22 @@
           id="confirmPassword"
           [(ngModel)]="confirmPassword"
           name="confirmPassword"
+          (blur)="validateConfirmPassword()"
           placeholder="Repite tu contraseña"
           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none placeholder-gray-400"
+          [class.border-red-500]="
+            confirmPasswordError || confirmPasswordMismatch
+          "
         />
+        <p *ngIf="confirmPasswordError" class="text-red-500 text-sm mt-1">
+          Confirma tu contraseña
+        </p>
+        <p *ngIf="confirmPasswordMismatch" class="text-red-500 text-sm mt-1">
+          Las contraseñas no coinciden
+        </p>
       </div>
 
-      <!-- Teléfono -->
+      <!-- Opcionales: teléfono y fecha de nacimiento -->
       <div>
         <label for="telefono" class="block text-gray-700 font-medium mb-2"
           >Teléfono (opcional)</label
@@ -99,7 +129,6 @@
         />
       </div>
 
-      <!-- Fecha de nacimiento -->
       <div>
         <label
           for="fechaNacimiento"
@@ -134,7 +163,10 @@
 
     <!-- Ir al inicio -->
     <p class="text-center text-gray-500 mt-4">
-      <a [routerLink]="['/']" class="text-blue-600 hover:text-blue-800"
+      <a
+        [routerLink]="['/']"
+        fragment="inicio"
+        class="text-blue-600 hover:text-blue-800"
         >Ir al inicio</a
       >
     </p>
