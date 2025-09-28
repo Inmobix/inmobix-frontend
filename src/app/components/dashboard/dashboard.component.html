@@ -1,0 +1,79 @@
+<section class="min-h-screen bg-gray-50 p-6">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-10">
+      <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
+      <button
+        (click)="logout()"
+        class="bg-red-400 hover:bg-red-500 text-white px-4 py-2 rounded-lg font-semibold transition-colors cursor-pointer"
+      >
+        Cerrar Sesión
+      </button>
+    </div>
+
+    <!-- CRUD Sections -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <!-- Propiedades -->
+      <div class="bg-white rounded-xl shadow-lg p-6">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">Propiedades</h2>
+        <div class="space-y-3">
+          <button
+            [routerLink]="['/dashboard']"
+            class="w-full bg-blue-300 hover:bg-blue-400 text-gray-900 px-4 py-2 rounded-lg font-semibold transition-colors cursor-pointer"
+          >
+            Listar Propiedades
+          </button>
+          <button
+            [routerLink]="['/dashboard']"
+            class="w-full bg-green-300 hover:bg-green-400 text-gray-900 px-4 py-2 rounded-lg font-semibold transition-colors cursor-pointer"
+          >
+            Crear Propiedad
+          </button>
+          <button
+            [routerLink]="['/dashboard']"
+            class="w-full bg-yellow-200 hover:bg-yellow-300 text-gray-900 px-4 py-2 rounded-lg font-semibold transition-colors cursor-pointer"
+          >
+            Editar Propiedad
+          </button>
+          <button
+            [routerLink]="['/dashboard']"
+            class="w-full bg-red-300 hover:bg-red-400 text-gray-900 px-4 py-2 rounded-lg font-semibold transition-colors cursor-pointer"
+          >
+            Eliminar Propiedad
+          </button>
+        </div>
+      </div>
+
+      <!-- Perfil -->
+      <div class="bg-white rounded-xl shadow-lg p-6">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">Perfil</h2>
+        <div class="space-y-3">
+          <button
+            [routerLink]="['/dashboard']"
+            class="w-full bg-blue-300 hover:bg-blue-400 text-gray-900 px-4 py-2 rounded-lg font-semibold transition-colors cursor-pointer"
+          >
+            Ver Perfil
+          </button>
+          <button
+            [routerLink]="['/dashboard']"
+            class="w-full bg-yellow-200 hover:bg-yellow-300 text-gray-900 px-4 py-2 rounded-lg font-semibold transition-colors cursor-pointer"
+          >
+            Editar Perfil
+          </button>
+          <button
+            [routerLink]="['/dashboard']"
+            class="w-full bg-red-300 hover:bg-red-400 text-gray-900 px-4 py-2 rounded-lg font-semibold transition-colors cursor-pointer"
+          >
+            Eliminar Cuenta
+          </button>
+          <button
+            [routerLink]="['/dashboard']"
+            class="w-full bg-purple-200 hover:bg-purple-300 text-gray-900 px-4 py-2 rounded-lg font-semibold transition-colors cursor-pointer"
+          >
+            Listar Usuarios
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
