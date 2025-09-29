@@ -1,13 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { ApiService } from '../../../services/api.service';
+import { UserRequest } from '../../../models/user.model';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-register',
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './register.component.html',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class RegisterComponent {
   name: string = '';
@@ -16,7 +20,7 @@ export class RegisterComponent {
   password: string = '';
   confirmPassword: string = '';
   telefono?: string;
-  fechaNacimiento?: Date;
+  fechaNacimiento?: string;
 
   nameError: boolean = false;
   usernameError: boolean = false;
@@ -24,6 +28,11 @@ export class RegisterComponent {
   passwordError: boolean = false;
   confirmPasswordError: boolean = false;
   confirmPasswordMismatch: boolean = false;
+  isLoading: boolean = false;
+  errorMessage: string = '';
+  successMessage: string = '';
+
+  constructor(private apiService: ApiService, private router: Router) {}
 
   validateName() {
     this.nameError = !this.name.trim();
@@ -57,6 +66,8 @@ export class RegisterComponent {
     this.validateEmail();
     this.validatePassword();
     this.validateConfirmPassword();
+    this.errorMessage = '';
+    this.successMessage = '';
 
     if (
       this.nameError ||
@@ -68,6 +79,42 @@ export class RegisterComponent {
     ) {
       return;
     }
-    // Aquí iría la lógica para enviar los datos al servicio backend
+
+    this.isLoading = true;
+
+    const userData: UserRequest = {
+      name: this.name,
+      username: this.username,
+      email: this.email,
+      password: this.password,
+      phone: this.telefono,
+      birthDate: this.fechaNacimiento,
+    };
+
+    this.apiService.registerUser(userData).subscribe({
+      next: (response) => {
+        console.log('Usuario registrado:', response);
+        this.isLoading = false;
+        Swal.fire({
+          icon: 'success',
+          title: '¡Registro exitoso!',
+          text: 'Regresaras al login...',
+          timer: 2000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+        }).then(() => {
+          this.router.navigate(['/login']);
+        });
+      },
+      error: (error) => {
+        console.error('Error en registro:', error);
+        this.isLoading = false;
+        Swal.fire({
+          icon: 'error',
+          title: '¡Error al registrar!',
+          text: error.error?.message || 'Intenta nuevamente.',
+        });
+      },
+    });
   }
 }
