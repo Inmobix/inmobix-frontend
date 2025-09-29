@@ -19,7 +19,8 @@
           name="name"
           (blur)="validateName()"
           placeholder="Tu nombre"
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none placeholder-gray-400"
+          [disabled]="isLoading"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none placeholder-gray-400 disabled:bg-gray-100"
           [class.border-red-500]="nameError"
         />
         <p *ngIf="nameError" class="text-red-500 text-sm mt-1">
@@ -39,7 +40,8 @@
           name="username"
           (blur)="validateUsername()"
           placeholder="Tu usuario"
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none placeholder-gray-400"
+          [disabled]="isLoading"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none placeholder-gray-400 disabled:bg-gray-100"
           [class.border-red-500]="usernameError"
         />
         <p *ngIf="usernameError" class="text-red-500 text-sm mt-1">
@@ -59,7 +61,8 @@
           name="email"
           (blur)="validateEmail()"
           placeholder="Ingresa tu email"
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none placeholder-gray-400"
+          [disabled]="isLoading"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none placeholder-gray-400 disabled:bg-gray-100"
           [class.border-red-500]="emailError"
         />
         <p *ngIf="emailError" class="text-red-500 text-sm mt-1">
@@ -79,7 +82,8 @@
           name="password"
           (blur)="validatePassword()"
           placeholder="Ingresa tu contraseña"
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none placeholder-gray-400"
+          [disabled]="isLoading"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none placeholder-gray-400 disabled:bg-gray-100"
           [class.border-red-500]="passwordError"
         />
         <p *ngIf="passwordError" class="text-red-500 text-sm mt-1">
@@ -101,7 +105,8 @@
           name="confirmPassword"
           (blur)="validateConfirmPassword()"
           placeholder="Repite tu contraseña"
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none placeholder-gray-400"
+          [disabled]="isLoading"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none placeholder-gray-400 disabled:bg-gray-100"
           [class.border-red-500]="
             confirmPasswordError || confirmPasswordMismatch
           "
@@ -125,7 +130,8 @@
           [(ngModel)]="telefono"
           name="telefono"
           placeholder="Opcional"
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none placeholder-gray-400"
+          [disabled]="isLoading"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none placeholder-gray-400 disabled:bg-gray-100"
         />
       </div>
 
@@ -140,16 +146,22 @@
           id="fechaNacimiento"
           [(ngModel)]="fechaNacimiento"
           name="fechaNacimiento"
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none"
+          [disabled]="isLoading"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none disabled:bg-gray-100"
         />
       </div>
 
       <!-- Registrarse -->
       <button
         type="submit"
-        class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg font-semibold transition-colors cursor-pointer"
+        [disabled]="isLoading"
+        class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg font-semibold transition-colors cursor-pointer disabled:bg-blue-300 disabled:cursor-not-allowed flex items-center justify-center"
       >
-        Registrarse
+        <span *ngIf="!isLoading">Registrarse</span>
+        <span *ngIf="isLoading" class="flex items-center">
+          <iconify-icon icon="svg-spinners:180-ring" width="24" height="24" />
+          Registrando...
+        </span>
       </button>
     </form>
 
