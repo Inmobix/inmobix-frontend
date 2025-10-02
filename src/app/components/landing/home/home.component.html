@@ -1,0 +1,179 @@
+<!-- Navbar -->
+<nav class="bg-white shadow-lg fixed w-full z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <!-- Logo -->
+      <div class="flex items-center">
+        <h1 class="text-2xl font-bold text-blue-600">Inmobix</h1>
+      </div>
+
+      <!-- Desktop Links -->
+      <div class="hidden md:flex space-x-8">
+        <a
+          (click)="scrollToSection('inicio')"
+          class="cursor-pointer text-gray-700 hover:text-blue-600 font-medium"
+          >Inicio</a
+        >
+        <a
+          (click)="scrollToSection('propiedades')"
+          class="cursor-pointer text-gray-700 hover:text-blue-600 font-medium"
+          >Propiedades</a
+        >
+        <a
+          (click)="scrollToSection('contacto')"
+          class="cursor-pointer text-gray-700 hover:text-blue-600 font-medium"
+          >Contacto</a
+        >
+      </div>
+
+      <!-- Desktop Buttons -->
+      <div class="hidden md:flex space-x-3">
+        <button
+          [routerLink]="['/login']"
+          class="text-blue-600 hover:text-blue-800 font-medium px-4 py-2 rounded-lg hover:bg-blue-50 transition-all cursor-pointer"
+        >
+          Iniciar Sesión
+        </button>
+        <button
+          [routerLink]="['/register']"
+          class="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+        >
+          Registrarse
+        </button>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <div class="md:hidden flex items-center">
+        <button
+          (click)="toggleMenu()"
+          class="text-gray-700 hover:text-blue-600 focus:outline-none"
+        >
+          <svg
+            *ngIf="!menuOpen"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 8h16M4 16h16"
+            />
+          </svg>
+          <svg
+            *ngIf="menuOpen"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div *ngIf="menuOpen" class="md:hidden bg-white shadow-lg">
+    <a
+      (click)="scrollToSection('inicio')"
+      class="block px-4 py-3 text-gray-700 hover:text-blue-600"
+      >Inicio</a
+    >
+    <a
+      (click)="scrollToSection('propiedades')"
+      class="block px-4 py-3 text-gray-700 hover:text-blue-600"
+      >Propiedades</a
+    >
+    <a
+      (click)="scrollToSection('contacto')"
+      class="block px-4 py-3 text-gray-700 hover:text-blue-600"
+      >Contacto</a
+    >
+    <a
+      [routerLink]="['/login']"
+      class="block px-4 py-3 text-blue-600 hover:text-blue-800"
+      >Iniciar Sesión</a
+    >
+    <a
+      [routerLink]="['/register']"
+      class="block px-4 py-3 bg-blue-600 text-white text-center rounded-lg mx-4 my-2 hover:bg-blue-700"
+      >Registrarse</a
+    >
+  </div>
+</nav>
+
+<!-- Hero -->
+<section
+  id="inicio"
+  class="pt-16 bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen flex items-center"
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
+    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+      Encuentra tu <span class="text-blue-600">hogar ideal</span> con Inmobix
+    </h1>
+    <p class="text-xl text-gray-600 mb-8">
+      Conecta con propiedades que se ajusten a tus necesidades.
+    </p>
+
+    <div class="flex flex-col sm:flex-row justify-center gap-4">
+      <button
+        [routerLink]="['/propiedades']"
+        class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold transition-colors"
+      >
+        Ver Propiedades
+      </button>
+      <button
+        [routerLink]="['/publicar']"
+        class="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-8 py-4 rounded-lg font-semibold transition-all"
+      >
+        Publicar Propiedad
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Propiedades -->
+<section id="propiedades" class="py-20 bg-white text-center">
+  <h2 class="text-3xl font-bold text-gray-900 mb-6">Propiedades Destacadas</h2>
+  <p class="text-gray-600 mb-8">
+    Aquí puedes redirigir a los listados de propiedades.
+  </p>
+  <button
+    [routerLink]="['/propiedades']"
+    class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold transition-colors"
+  >
+    Ver Todas las Propiedades
+  </button>
+</section>
+
+<!-- Contacto -->
+<section id="contacto" class="py-20 bg-gray-900 text-center text-white">
+  <h2 class="text-3xl font-bold mb-6">
+    ¿Listo para encontrar tu próximo hogar?
+  </h2>
+  <p class="mb-8">Contáctanos y descubre cómo podemos ayudarte.</p>
+  <button
+    [routerLink]="['/contacto']"
+    class="border-2 border-white text-white hover:bg-white hover:text-gray-900 px-8 py-4 rounded-lg font-semibold transition-all"
+  >
+    Contáctanos
+  </button>
+</section>
+
+<!-- Footer -->
+<footer
+  class="bg-gray-900 border-t border-gray-800 py-12 text-center text-gray-400"
+>
+  <p>&copy; 2025 Inmobix. Todos los derechos reservados.</p>
+</footer>
