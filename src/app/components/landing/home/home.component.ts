@@ -1,25 +1,27 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Component } from "@angular/core"
+import { CommonModule } from "@angular/common"
+import { RouterModule } from "@angular/router"
+import { NavbarComponent } from "../../../estructrales/navbar/navbar.component"
+import { HeroComponent } from "../../../estructrales/hero/hero.component"
+import { PropertyBenefitsComponent } from "../../../estructrales/property-benefits/property-benefits.component"
+import { LocationPropertiesComponent } from "../../../estructrales/location-properties/location-properties.component"
+import { FooterComponent } from "../../../estructrales/footer/footer.component"
+
 
 @Component({
-  selector: 'app-home',
+  selector: "app-home",
   standalone: true,
-  imports: [CommonModule, RouterModule],
-  templateUrl: './home.component.html',
+  imports: [
+    CommonModule,
+    RouterModule,
+    NavbarComponent,
+    HeroComponent,
+    PropertyBenefitsComponent,
+    LocationPropertiesComponent,
+    FooterComponent,
+  ],
+  templateUrl: "./home.component.html",
 })
 export class HomeComponent {
-  menuOpen = false; // Control del menú móvil
-
-  scrollToSection(sectionId: string): void {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-    this.menuOpen = false; // cerrar menú en mobile
-  }
-
-  toggleMenu(): void {
-    this.menuOpen = !this.menuOpen;
-  }
+  // El navbar maneja su propio scroll, no necesitamos métodos aquí
 }
