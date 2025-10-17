@@ -6,9 +6,20 @@ import { ForgotPasswordComponent } from './components/auth/forgot-password/forgo
 import { DashboardComponent } from './components/dashboard/dashboard/dashboard.component';
 import { AuthGuard } from './guards/auth.guard';
 import { UserListComponent } from './components/dashboard/user-list/user-list.component';
+import { NavbarComponent } from './estructrales/navbar/navbar.component';
+import { FooterComponent } from './estructrales/footer/footer.component';
+import { LocationPropertiesComponent } from './estructrales/location-properties/location-properties.component';
+import { HeroComponent } from './estructrales/hero/hero.component';
+import { PropertyBenefitsComponent } from './estructrales/property-benefits/property-benefits.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
+  { path: 'navbar', component: NavbarComponent },
+  { path: 'footer', component: FooterComponent },
+  { path: 'location-properties', component: LocationPropertiesComponent },
+  { path: 'hero', component: HeroComponent },
+  { path: 'property-benefits', component: PropertyBenefitsComponent },
+
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
