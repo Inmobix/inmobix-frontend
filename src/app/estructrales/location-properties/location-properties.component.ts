@@ -1,8 +1,11 @@
 import { CommonModule } from "@angular/common"
 import { Component, type OnInit } from "@angular/core"
 import { FormsModule } from "@angular/forms"
+import { PropertyService } from "../../services/property.service"
+import { Property } from "../../models/property.model"
 
-interface Property {
+// <CHANGE> Created a separate interface for display properties
+interface DisplayProperty {
   id: number
   title: string
   price: number
@@ -53,100 +56,53 @@ export class LocationPropertiesComponent implements OnInit {
   minPrice: number | null = null
   maxPrice: number | null = null
 
-  // Propiedades mostradas
-  properties: Property[] = [
-    {
-      id: 1,
-      title: "Casa Harbor",
-      price: 1600000,
-      rentType: "Mes",
-      imgSrc: "assets/images/property1.jpg",
-      isFavorite: false,
-      location: "2699 Villa Central, Ocaña, N. Santander",
-      beds: 3,
-      baths: 2,
-      area: 6.7,
-      areaUnit: "m²",
-      type: "alquiler",
-      isPopular: true,
-    },
-    {
-      id: 2,
-      title: "Apartamento Edificio Beverly",
-      price: 1200000,
-      rentType: "Mes",
-      imgSrc: "assets/images/property2.jpg",
-      isFavorite: false,
-      location: "2821 Villa Carolina, Ocaña, N. Santander",
-      beds: 4,
-      baths: 2,
-      area: 47.5,
-      areaUnit: "m²",
-      type: "alquiler",
-      isPopular: true,
-    },
-    {
-      id: 3,
-      title: "Casa de campestre",
-      price: 2400000,
-      rentType: "Mes",
-      imgSrc: "assets/images/property3.jpg",
-      isFavorite: false,
-      location: "909 Lagos Country, Ocaña, N. Santander",
-      beds: 4,
-      baths: 3,
-      area: 80,
-      areaUnit: "m²",
-      type: "venta",
-      isPopular: true,
-    },
-    {
-      id: 4,
-      title: "Apartamento Torre ISA",
-      price: 2600000,
-      rentType: "Mes",
-      imgSrc: "assets/images/property4.jpg",
-      isFavorite: false,
-      location: "210 Lagos Country, Ocaña, N. Santander",
-      beds: 4,
-      baths: 2,
-      area: 48,
-      areaUnit: "m²",
-      type: "venta",
-    },
-    {
-      id: 5,
-      title: "Casa Centro",
-      price: 1400000,
-      rentType: "Mes",
-      imgSrc: "assets/images/property5.jpg",
-      isFavorite: false,
-      location: "243 Notarias, Ocaña, N. Santander",
-      beds: 2,
-      baths: 1,
-      area: 37.5,
-      areaUnit: "m²",
-      type: "alquiler",
-    },
-    {
-      id: 6,
-      title: "Apartamento Edificio Caribe",
-      price: 1600000,
-      rentType: "Mes",
-      imgSrc: "assets/images/property6.jpg",
-      isFavorite: false,
-      location: "101 Buenos Aires, Ocaña, N. Santander",
-      beds: 3,
-      baths: 1,
-      area: 35,
-      areaUnit: "m²",
-      type: "venta",
-    },
-  ]
+  // <CHANGE> Changed to DisplayProperty type
+  properties: DisplayProperty[] = []
 
-  constructor() {}
+  loading = false
+  error: string | null = null
 
-  ngOnInit(): void {}
+  constructor(private propertyService: PropertyService) {}
+
+  ngOnInit(): void {
+    this.loadProperties()
+  }
+
+  loadProperties(): void {
+    this.loading = true
+    this.error = null
+
+    this.propertyService.getAllProperties().subscribe({
+      next: (response: Property[]) => {
+        this.properties = this.mapResponseToProperties(response)
+        this.loading = false
+      },
+      error: (err) => {
+        console.error("Error al cargar propiedades:", err)
+        this.error = "No se pudieron cargar las propiedades. Por favor, intenta de nuevo."
+        this.loading = false
+      },
+    })
+  }
+
+  // <CHANGE> Fixed mapping function with proper types
+  private mapResponseToProperties(responses: Property[]): DisplayProperty[] {
+    return responses.map((prop) => ({
+      id: prop.id || 0,
+      title: prop.title,
+      price: prop.price,
+      rentType: prop.transactionType === "RENT" ? "Mes" : "Total",
+      imgSrc: prop.imageUrl || "assets/images/default-property.jpg",
+      isFavorite: false,
+      location: `${prop.address}, ${prop.city}, ${prop.state}`,
+      beds: prop.bedrooms || 0,
+      baths: prop.bathrooms || 0,
+      area: prop.area || 0,
+      areaUnit: "m²",
+      type: prop.transactionType?.toLowerCase() === "sale" ? "venta" : "alquiler",
+      isPopular: false,
+    }))
+  }
 
   // Cambiar filtro activo
   setFilter(filter: "todos" | "venta" | "alquiler"): void {
@@ -154,7 +110,7 @@ export class LocationPropertiesComponent implements OnInit {
   }
 
   // Alternar favorito
-  toggleFavorite(property: Property): void {
+  toggleFavorite(property: DisplayProperty): void {
     property.isFavorite = !property.isFavorite
   }
 
@@ -173,7 +129,7 @@ export class LocationPropertiesComponent implements OnInit {
   }
 
   // Filtrar propiedades según todos los criterios
-  get filteredProperties(): Property[] {
+  get filteredProperties(): DisplayProperty[] {
     let filtered = this.properties
 
     // Filtrar por tipo
