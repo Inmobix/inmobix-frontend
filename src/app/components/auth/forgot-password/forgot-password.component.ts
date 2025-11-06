@@ -63,13 +63,30 @@ export class ForgotPasswordComponent {
         });
       },
       error: (error) => {
-        console.error('Error:', error);
         this.isLoading = false;
+        console.error('Error completo:', error);
+
+        let errorMsg = 'No se pudo enviar el correo de recuperación.';
+
+        if (error.error) {
+          if (typeof error.error === 'string') {
+            try {
+              const parsed = JSON.parse(error.error);
+              if (parsed.message) {
+                errorMsg = parsed.message;
+              }
+            } catch {
+              errorMsg = error.error;
+            }
+          } else if (error.error.message) {
+            errorMsg = error.error.message;
+          }
+        }
 
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: error.error || 'No se pudo enviar el correo de recuperación.',
+          text: errorMsg,
         });
       },
     });
