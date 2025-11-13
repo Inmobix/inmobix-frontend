@@ -3,7 +3,7 @@ import { CommonModule } from "@angular/common"
 import { RouterModule, Router, ActivatedRoute } from "@angular/router"
 import { FormsModule } from "@angular/forms"
 import { ApiService } from "../../../services/api.service"
-import { VerifyWithTokenRequest } from "../../../models/user.model"
+import type { VerifyWithTokenRequest } from "../../../models/user.model"
 import Swal from "sweetalert2"
 
 @Component({
@@ -19,6 +19,7 @@ export class VerifyEmailComponent implements OnInit {
   codeError = ""
   isLoading = false
   message = ""
+  emailToVerify = ""
 
   constructor(
     private apiService: ApiService,
@@ -27,12 +28,28 @@ export class VerifyEmailComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Obtener token de la URL si viene como query param
-    this.route.queryParams.subscribe((params) => {
-      if (params["token"]) {
-        this.verificationToken = params["token"]
-      }
-    })
+    const storedToken = localStorage.getItem('verificationToken')
+    const storedEmail = localStorage.getItem('emailToVerify')
+    
+    if (storedToken) {
+      this.verificationToken = storedToken
+      console.log("[v0] Token de verificación cargado desde localStorage")
+    } else {
+      // Fallback: intentar obtener de query params
+      this.route.queryParams.subscribe((params) => {
+        if (params["token"]) {
+          this.verificationToken = params["token"]
+          console.log("[v0] Token de verificación cargado desde URL")
+        } else {
+          console.log("[v0] No se encontró token de verificación")
+        }
+      })
+    }
+
+    // Guardar email si existe para función de reenvío
+    if (storedEmail) {
+      this.emailToVerify = storedEmail
+    }
   }
 
   validateCode() {
@@ -58,6 +75,9 @@ export class VerifyEmailComponent implements OnInit {
         next: (response) => {
           this.isLoading = false
           const message = response.message || "Email verificado exitosamente"
+
+          localStorage.removeItem('verificationToken')
+          localStorage.removeItem('emailToVerify')
 
           Swal.fire({
             icon: "success",
@@ -85,24 +105,55 @@ export class VerifyEmailComponent implements OnInit {
       Swal.fire({
         icon: "warning",
         title: "Token faltante",
-        text: "No se encontró el token de verificación. Por favor, revisa tu email.",
+        text: "No se encontró el token de verificación. Por favor, vuelve a registrarte o solicita un nuevo código.",
       })
     }
   }
 
   resendCode() {
-    if (!this.verificationToken) {
+    if (!this.emailToVerify) {
       Swal.fire({
         icon: "warning",
-        title: "Token faltante",
-        text: "No se puede reenviar el código sin un token válido.",
+        title: "Email faltante",
+        text: "No se puede reenviar el código. Por favor, vuelve a iniciar sesión.",
       })
       return
     }
 
     this.isLoading = true
-    // Aquí implementarías la llamada al endpoint de reenvío
-    // this.apiService.resendVerificationCode(this.verificationToken).subscribe(...)
-    this.isLoading = false
+    
+    // Usar el endpoint de reenvío con el email guardado
+    this.apiService.resendVerificationEmail({ email: this.emailToVerify }).subscribe({
+      next: (response) => {
+        this.isLoading = false
+        
+        // Si el backend devuelve un nuevo token, guardarlo
+        if (response.verificationToken) {
+          localStorage.setItem('verificationToken', response.verificationToken)
+          this.verificationToken = response.verificationToken
+        }
+        
+        const message = response.message || "Código reenviado exitosamente"
+        
+        Swal.fire({
+          icon: "success",
+          title: "¡Código reenviado!",
+          text: message,
+          timer: 2000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+        })
+      },
+      error: (error) => {
+        this.isLoading = false
+        const errorMsg = error.error?.message || "Error al reenviar el código."
+        
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: errorMsg,
+        })
+      }
+    })
   }
 }
