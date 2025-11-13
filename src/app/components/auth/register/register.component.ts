@@ -107,8 +107,20 @@ export class RegisterComponent {
     this.apiService.registerUser(userData).subscribe({
       next: (response) => {
         this.isLoading = false
+        console.log('[v0] Respuesta del registro:', response)
+        console.log('[v0] Token de verificación recibido:', response.verificationToken)
+        
         const message = response.message || "Registro exitoso. Verifica tu email."
         const verificationToken = response.verificationToken
+
+        if (verificationToken) {
+          localStorage.setItem('verificationToken', verificationToken)
+          console.log('[v0] Token guardado en localStorage')
+        } else {
+          console.warn('[v0] No se recibió token de verificación')
+        }
+        
+        localStorage.setItem('emailToVerify', this.email)
 
         Swal.fire({
           icon: "success",
@@ -118,13 +130,7 @@ export class RegisterComponent {
           timerProgressBar: true,
           showConfirmButton: false,
         }).then(() => {
-          if (verificationToken) {
-            this.router.navigate(["/verify-email"], {
-              queryParams: { token: verificationToken },
-            })
-          } else {
-            this.router.navigate(["/login"])
-          }
+          this.router.navigate(["/verify-email"])
         })
       },
       error: (error) => {

@@ -92,6 +92,9 @@ export class LoginComponent {
             errorMsg.toLowerCase().includes("verificar")
 
           if (requiresVerification) {
+            // Guardar email para poder reenviar código de verificación
+            localStorage.setItem('emailToVerify', this.email)
+            
             Swal.fire({
               icon: "warning",
               title: "Email no verificado",
