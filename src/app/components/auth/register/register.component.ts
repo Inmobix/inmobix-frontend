@@ -1,73 +1,80 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { ApiService } from '../../../services/api.service';
-import { UserRequest } from '../../../models/user.model';
-import Swal from 'sweetalert2';
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core"
+import { CommonModule } from "@angular/common"
+import { RouterModule, Router } from "@angular/router"
+import { FormsModule } from "@angular/forms"
+import { ApiService } from "../../../services/api.service"
+import type { UserRequest } from "../../../models/user.model"
+import Swal from "sweetalert2"
 
 @Component({
-  selector: 'app-register',
+  selector: "app-register",
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule],
-  templateUrl: './register.component.html',
+  templateUrl: "./register.component.html",
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class RegisterComponent {
-  name: string = '';
-  username: string = '';
-  email: string = '';
-  password: string = '';
-  confirmPassword: string = '';
-  telefono?: string;
-  fechaNacimiento?: string;
+  name = ""
+  username = ""
+  email = ""
+  password = ""
+  confirmPassword = ""
+  documento = ""
+  telefono?: string
+  fechaNacimiento?: string
 
-  nameError: boolean = false;
-  usernameError: boolean = false;
-  emailError: boolean = false;
-  passwordError: boolean = false;
-  confirmPasswordError: boolean = false;
-  confirmPasswordMismatch: boolean = false;
-  isLoading: boolean = false;
-  errorMessage: string = '';
-  successMessage: string = '';
+  nameError = false
+  usernameError = false
+  emailError = false
+  passwordError = false
+  confirmPasswordError = false
+  confirmPasswordMismatch = false
+  documentoError = false
+  isLoading = false
+  errorMessage = ""
+  successMessage = ""
 
-  constructor(private apiService: ApiService, private router: Router) {}
+  constructor(
+    private apiService: ApiService,
+    private router: Router,
+  ) {}
 
   validateName() {
-    this.nameError = !this.name.trim();
+    this.nameError = !this.name.trim()
   }
 
   validateUsername() {
-    this.usernameError = !this.username.trim();
+    this.usernameError = !this.username.trim()
   }
 
   validateEmail() {
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    this.emailError = !this.email.trim() || !emailPattern.test(this.email);
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    this.emailError = !this.email.trim() || !emailPattern.test(this.email)
   }
 
   validatePassword() {
-    this.passwordError = !this.password;
-    this.validateConfirmPassword();
+    this.passwordError = !this.password
+    this.validateConfirmPassword()
   }
 
   validateConfirmPassword() {
-    this.confirmPasswordError = !this.confirmPassword;
-    this.confirmPasswordMismatch =
-      !!this.password &&
-      !!this.confirmPassword &&
-      this.password !== this.confirmPassword;
+    this.confirmPasswordError = !this.confirmPassword
+    this.confirmPasswordMismatch = !!this.password && !!this.confirmPassword && this.password !== this.confirmPassword
+  }
+
+  validateDocumento() {
+    this.documentoError = !this.documento.trim()
   }
 
   onSubmit() {
-    this.validateName();
-    this.validateUsername();
-    this.validateEmail();
-    this.validatePassword();
-    this.validateConfirmPassword();
-    this.errorMessage = '';
-    this.successMessage = '';
+    this.validateName()
+    this.validateUsername()
+    this.validateEmail()
+    this.validatePassword()
+    this.validateConfirmPassword()
+    this.validateDocumento()
+    this.errorMessage = ""
+    this.successMessage = ""
 
     if (
       this.nameError ||
@@ -75,46 +82,69 @@ export class RegisterComponent {
       this.emailError ||
       this.passwordError ||
       this.confirmPasswordError ||
-      this.confirmPasswordMismatch
+      this.confirmPasswordMismatch ||
+      this.documentoError
     ) {
-      return;
+      return
     }
 
-    this.isLoading = true;
+    this.isLoading = true
+
+    const formattedBirthDate = this.fechaNacimiento
+      ? new Date(this.fechaNacimiento).toISOString().split("T")[0]
+      : undefined
 
     const userData: UserRequest = {
       name: this.name,
       username: this.username,
       email: this.email,
       password: this.password,
+      documento: this.documento,
       phone: this.telefono,
-      birthDate: this.fechaNacimiento,
-    };
+      birthDate: formattedBirthDate,
+    }
 
     this.apiService.registerUser(userData).subscribe({
       next: (response) => {
-        console.log('Usuario registrado:', response);
-        this.isLoading = false;
+        this.isLoading = false
+        const message = response.message || "Registro exitoso. Verifica tu email."
+        const verificationToken = response.verificationToken
+
         Swal.fire({
-          icon: 'success',
-          title: '¡Registro exitoso!',
-          text: 'Regresaras al login...',
-          timer: 2000,
+          icon: "success",
+          title: "¡Registro exitoso!",
+          text: message,
+          timer: 3000,
           timerProgressBar: true,
           showConfirmButton: false,
         }).then(() => {
-          this.router.navigate(['/login']);
-        });
+          if (verificationToken) {
+            this.router.navigate(["/verify-email"], {
+              queryParams: { token: verificationToken },
+            })
+          } else {
+            this.router.navigate(["/login"])
+          }
+        })
       },
       error: (error) => {
-        console.error('Error en registro:', error);
-        this.isLoading = false;
+        this.isLoading = false
+
+        let errorMsg = "Intenta nuevamente."
+        if (error.error?.message) {
+          errorMsg = error.error.message
+        } else if (error.message) {
+          errorMsg = error.message
+        } else if (error.status === 0) {
+          errorMsg = "No se puede conectar con el servidor. Verifica tu conexión."
+        }
+
         Swal.fire({
-          icon: 'error',
-          title: '¡Error al registrar!',
-          text: error.error?.message || 'Intenta nuevamente.',
-        });
+          icon: "error",
+          title: "¡Error al registrar!",
+          text: errorMsg,
+        })
       },
-    });
+    })
   }
 }

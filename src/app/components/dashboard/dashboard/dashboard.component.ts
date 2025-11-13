@@ -2,10 +2,11 @@ import { Component, type OnInit } from "@angular/core"
 import { Router, RouterLink } from "@angular/router"
 import { PropertyService } from "../../../services/property.service"
 import { ApiService } from "../../../services/api.service"
-import { PropertyRequest, PropertyResponse } from "../../../models/property.model"
+import type { PropertyRequest, PropertyResponse } from "../../../models/property.model"
 import Swal from "sweetalert2"
 import { CommonModule } from "@angular/common"
 import { FormsModule } from "@angular/forms"
+import type { UserResponse } from "../../../models/user.model"
 
 @Component({
   selector: "app-dashboard",
@@ -316,7 +317,7 @@ export class DashboardComponent implements OnInit {
       if (result.isConfirmed) {
         const userId = Number.parseInt(result.value)
         this.apiService.getUserById(userId).subscribe({
-          next: (user) => {
+          next: (user: UserResponse) => {
             Swal.fire({
               title: "Usuario Encontrado",
               html: `
@@ -327,7 +328,7 @@ export class DashboardComponent implements OnInit {
               icon: "success",
             })
           },
-          error: (error) => {
+          error: (error: any) => {
             console.error("Error al buscar usuario:", error)
             Swal.fire("Error", "No se encontró el usuario", "error")
           },

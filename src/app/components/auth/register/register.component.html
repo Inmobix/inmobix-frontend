@@ -70,6 +70,27 @@
         </p>
       </div>
 
+      <!-- Agregando campo documento obligatorio -->
+      <div>
+        <label for="documento" class="block text-gray-700 font-medium mb-2"
+          >Documento de identidad</label
+        >
+        <input
+          type="text"
+          id="documento"
+          [(ngModel)]="documento"
+          name="documento"
+          (blur)="validateDocumento()"
+          placeholder="Tu documento"
+          [disabled]="isLoading"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none placeholder-gray-400 disabled:bg-gray-100"
+          [class.border-red-500]="documentoError"
+        />
+        <p *ngIf="documentoError" class="text-red-500 text-sm mt-1">
+          El documento es obligatorio
+        </p>
+      </div>
+
       <!-- Contraseña -->
       <div>
         <label for="password" class="block text-gray-700 font-medium mb-2"
