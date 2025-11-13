@@ -1,186 +1,204 @@
-<section
-  class="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-8"
->
-  <div class="max-w-md w-full bg-white rounded-xl shadow-lg p-10 m-4">
-    <h2 class="text-3xl font-bold text-gray-900 text-center mb-6">
-      Crear Cuenta
-    </h2>
-
-    <form class="space-y-4" (ngSubmit)="onSubmit()">
-      <!-- Nombre -->
-      <div>
-        <label for="name" class="block text-gray-700 font-medium mb-2"
-          >Nombre completo</label
-        >
-        <input
-          type="text"
-          id="name"
-          [(ngModel)]="name"
-          name="name"
-          (blur)="validateName()"
-          placeholder="Tu nombre"
-          [disabled]="isLoading"
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none placeholder-gray-400 disabled:bg-gray-100"
-          [class.border-red-500]="nameError"
-        />
-        <p *ngIf="nameError" class="text-red-500 text-sm mt-1">
-          El nombre es obligatorio
-        </p>
+<section class="bg-[#eeeeff] h-screen flex items-center justify-center overflow-hidden">
+  <div class="flex justify-center w-full px-4">
+    <div class="bg-white shadow-lg rounded-lg w-full max-w-5xl flex relative h-[90vh]">
+      <!-- Botón home flotante -->
+      <div class="absolute flex -top-5 -left-5 w-12 h-12 bg-indigo-500 rounded-full z-10">
+        <a [routerLink]="['/']" class="flex items-center justify-center w-full h-full">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-[70%] text-white"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"
+            />
+          </svg>
+        </a>
       </div>
 
-      <!-- Username -->
-      <div>
-        <label for="username" class="block text-gray-700 font-medium mb-2"
-          >Nombre de usuario</label
-        >
-        <input
-          type="text"
-          id="username"
-          [(ngModel)]="username"
-          name="username"
-          (blur)="validateUsername()"
-          placeholder="Tu usuario"
-          [disabled]="isLoading"
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none placeholder-gray-400 disabled:bg-gray-100"
-          [class.border-red-500]="usernameError"
-        />
-        <p *ngIf="usernameError" class="text-red-500 text-sm mt-1">
-          El usuario es obligatorio
-        </p>
-      </div>
-
-      <!-- Email -->
-      <div>
-        <label for="email" class="block text-gray-700 font-medium mb-2"
-          >Correo electrónico</label
-        >
-        <input
-          type="email"
-          id="email"
-          [(ngModel)]="email"
-          name="email"
-          (blur)="validateEmail()"
-          placeholder="Ingresa tu email"
-          [disabled]="isLoading"
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none placeholder-gray-400 disabled:bg-gray-100"
-          [class.border-red-500]="emailError"
-        />
-        <p *ngIf="emailError" class="text-red-500 text-sm mt-1">
-          Correo obligatorio
-        </p>
-      </div>
-
-      <!-- Contraseña -->
-      <div>
-        <label for="password" class="block text-gray-700 font-medium mb-2"
-          >Contraseña</label
-        >
-        <input
-          type="password"
-          id="password"
-          [(ngModel)]="password"
-          name="password"
-          (blur)="validatePassword()"
-          placeholder="Ingresa tu contraseña"
-          [disabled]="isLoading"
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none placeholder-gray-400 disabled:bg-gray-100"
-          [class.border-red-500]="passwordError"
-        />
-        <p *ngIf="passwordError" class="text-red-500 text-sm mt-1">
-          La contraseña es obligatoria
-        </p>
-      </div>
-
-      <!-- Confirmar Contraseña -->
-      <div>
-        <label
-          for="confirmPassword"
-          class="block text-gray-700 font-medium mb-2"
-          >Confirmar Contraseña</label
-        >
-        <input
-          type="password"
-          id="confirmPassword"
-          [(ngModel)]="confirmPassword"
-          name="confirmPassword"
-          (blur)="validateConfirmPassword()"
-          placeholder="Repite tu contraseña"
-          [disabled]="isLoading"
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none placeholder-gray-400 disabled:bg-gray-100"
-          [class.border-red-500]="
-            confirmPasswordError || confirmPasswordMismatch
-          "
-        />
-        <p *ngIf="confirmPasswordError" class="text-red-500 text-sm mt-1">
-          Confirma tu contraseña
-        </p>
-        <p *ngIf="confirmPasswordMismatch" class="text-red-500 text-sm mt-1">
-          Las contraseñas no coinciden
-        </p>
-      </div>
-
-      <!-- Opcionales: teléfono y fecha de nacimiento -->
-      <div>
-        <label for="telefono" class="block text-gray-700 font-medium mb-2"
-          >Teléfono (opcional)</label
-        >
-        <input
-          type="tel"
-          id="telefono"
-          [(ngModel)]="telefono"
-          name="telefono"
-          placeholder="Opcional"
-          [disabled]="isLoading"
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none placeholder-gray-400 disabled:bg-gray-100"
+      <!-- Imagen lateral -->
+      <div class="hidden md:block w-[45%]">
+        <img
+          src="https://images.adsttc.com/media/images/55ba/d29e/e58e/ce6b/e300/0097/medium_jpg/PORTADA_1.jpg?1438306958"
+          alt="Inmobiliaria"
+          class="w-full h-full object-cover rounded-l-lg"
         />
       </div>
 
-      <div>
-        <label
-          for="fechaNacimiento"
-          class="block text-gray-700 font-medium mb-2"
-          >Fecha de nacimiento (opcional)</label
-        >
-        <input
-          type="date"
-          id="fechaNacimiento"
-          [(ngModel)]="fechaNacimiento"
-          name="fechaNacimiento"
-          [disabled]="isLoading"
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none disabled:bg-gray-100"
-        />
+      <!-- Formulario con scroll interno -->
+      <div class="w-full md:w-[55%] overflow-y-auto">
+        <div class="p-8">
+          <div class="flex justify-center mb-6 mt-4">
+            <h1 class="font-bold text-3xl text-[#3730A3]">Crea tu cuenta</h1>
+          </div>
+
+          <form class="w-[85%] my-0 mx-auto space-y-4" (ngSubmit)="onSubmit()">
+            <!-- Nombre -->
+            <div>
+              <input
+                id="name"
+                [(ngModel)]="name"
+                name="name"
+                type="text"
+                placeholder="Nombre"
+                (blur)="validateName()"
+                [disabled]="isLoading"
+                class="w-full p-3 rounded-lg bg-[#eeeeff] text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-[#6366f1] disabled:bg-gray-100 disabled:cursor-not-allowed"
+              />
+              <div *ngIf="nameError" class="mt-1">
+                <small class="text-red-900 font-semibold p-1 rounded-lg">
+                  El nombre es obligatorio
+                </small>
+              </div>
+            </div>
+
+            <!-- Username -->
+            <div>
+              <input
+                id="username"
+                [(ngModel)]="username"
+                name="username"
+                type="text"
+                placeholder="Usuario"
+                (blur)="validateUsername()"
+                [disabled]="isLoading"
+                class="w-full p-3 rounded-lg bg-[#eeeeff] text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-[#6366f1] disabled:bg-gray-100 disabled:cursor-not-allowed"
+              />
+              <div *ngIf="usernameError" class="mt-1">
+                <small class="text-red-900 font-semibold p-1 rounded-lg">
+                  El usuario es obligatorio
+                </small>
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div>
+              <input
+                id="email"
+                [(ngModel)]="email"
+                name="email"
+                type="email"
+                placeholder="Email"
+                (blur)="validateEmail()"
+                [disabled]="isLoading"
+                class="w-full p-3 rounded-lg bg-[#eeeeff] text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-[#6366f1] disabled:bg-gray-100 disabled:cursor-not-allowed"
+              />
+              <div *ngIf="emailError" class="mt-1">
+                <small class="text-red-900 font-semibold p-1 rounded-lg">
+                  Email inválido o vacío
+                </small>
+              </div>
+            </div>
+
+            <!-- Contraseña -->
+            <div>
+              <input
+                id="password"
+                [(ngModel)]="password"
+                name="password"
+                type="password"
+                placeholder="Contraseña"
+                (blur)="validatePassword()"
+                [disabled]="isLoading"
+                class="w-full p-3 rounded-lg bg-[#eeeeff] text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-[#6366f1] disabled:bg-gray-100 disabled:cursor-not-allowed"
+              />
+              <div *ngIf="passwordError" class="mt-1">
+                <small class="text-red-900 font-semibold p-1 rounded-lg">
+                  La contraseña es obligatoria
+                </small>
+              </div>
+            </div>
+
+            <!-- Confirmar Contraseña -->
+            <div>
+              <input
+                id="confirmPassword"
+                [(ngModel)]="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                placeholder="Confirma tu contraseña"
+                (blur)="validateConfirmPassword()"
+                [disabled]="isLoading"
+                class="w-full p-3 rounded-lg bg-[#eeeeff] text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-[#6366f1] disabled:bg-gray-100 disabled:cursor-not-allowed"
+              />
+              <div *ngIf="confirmPasswordError" class="mt-1">
+                <small class="text-red-900 font-semibold p-1 rounded-lg">
+                  Debes confirmar tu contraseña
+                </small>
+              </div>
+              <div *ngIf="!confirmPasswordError && confirmPasswordMismatch" class="mt-1">
+                <small class="text-red-900 font-semibold p-1 rounded-lg">
+                  Las contraseñas no coinciden
+                </small>
+              </div>
+            </div>
+
+            <!-- Documento (opcional) -->
+            <div>
+              <input
+                id="documento"
+                [(ngModel)]="documento"
+                name="documento"
+                type="text"
+                placeholder="Documento (opcional)"
+                [disabled]="isLoading"
+                class="w-full p-3 rounded-lg bg-[#eeeeff] text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-[#6366f1] disabled:bg-gray-100 disabled:cursor-not-allowed"
+              />
+            </div>
+
+            <!-- Teléfono (opcional) -->
+            <div>
+              <input
+                id="telefono"
+                [(ngModel)]="telefono"
+                name="telefono"
+                type="tel"
+                placeholder="Teléfono (opcional)"
+                [disabled]="isLoading"
+                class="w-full p-3 rounded-lg bg-[#eeeeff] text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-[#6366f1] disabled:bg-gray-100 disabled:cursor-not-allowed"
+              />
+            </div>
+
+            <!-- Fecha de nacimiento (opcional) -->
+            <div>
+              <input
+                id="fechaNacimiento"
+                [(ngModel)]="fechaNacimiento"
+                name="fechaNacimiento"
+                type="date"
+                [disabled]="isLoading"
+                class="w-full p-3 rounded-lg bg-[#eeeeff] text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-[#6366f1] disabled:bg-gray-100 disabled:cursor-not-allowed"
+              />
+            </div>
+
+            <!-- Botón Registrar -->
+            <div class="flex justify-center pt-4">
+              <button
+                type="submit"
+                [disabled]="isLoading || !isFormValid()"
+                class="cursor-pointer bg-[#6366f1] py-2 px-10 rounded-lg font-semibold text-white hover:bg-indigo-600 disabled:bg-indigo-300 disabled:cursor-not-allowed transition-colors"
+              >
+                <span *ngIf="!isLoading">Registrar</span>
+                <span *ngIf="isLoading">Procesando...</span>
+              </button>
+            </div>
+
+            <!-- Iniciar sesión -->
+            <div class="flex justify-center pb-6">
+              <h1 class="flex items-center text-[#666666] text-sm">
+                ¿Ya tienes cuenta?
+              </h1>
+              <a
+                [routerLink]="['/login']"
+                class="underline ml-2 text-[#3730A3] rounded-lg font-semibold cursor-pointer hover:text-indigo-800"
+              >
+                Inicia Sesión
+              </a>
+            </div>
+          </form>
+        </div>
       </div>
-
-      <!-- Registrarse -->
-      <button
-        type="submit"
-        [disabled]="isLoading"
-        class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg font-semibold transition-colors cursor-pointer disabled:bg-blue-300 disabled:cursor-not-allowed flex items-center justify-center"
-      >
-        <span *ngIf="!isLoading">Registrarse</span>
-        <span *ngIf="isLoading" class="flex items-center">
-          <iconify-icon icon="svg-spinners:180-ring" width="24" height="24" />
-          Registrando...
-        </span>
-      </button>
-    </form>
-
-    <!-- Inicia sesión -->
-    <p class="text-center text-gray-600 mt-6">
-      ¿Ya tienes cuenta?
-      <a [routerLink]="['/login']" class="text-blue-600 hover:text-blue-800"
-        >Inicia sesión</a
-      >
-    </p>
-
-    <!-- Ir al inicio -->
-    <p class="text-center text-gray-500 mt-4">
-      <a
-        [routerLink]="['/']"
-        fragment="inicio"
-        class="text-blue-600 hover:text-blue-800"
-        >Ir al inicio</a
-      >
-    </p>
+    </div>
   </div>
 </section>
