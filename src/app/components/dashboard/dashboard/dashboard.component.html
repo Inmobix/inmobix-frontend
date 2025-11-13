@@ -1,747 +1,658 @@
-<section class="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-blue-50">
-  <!-- Header/Navbar -->
-  <nav class="bg-white shadow-md sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between items-center h-16">
-        <div class="flex items-center">
-          <h1 class="text-2xl font-bold text-[#3730A3]">Inmobix Dashboard</h1>
-        </div>
-        <div class="flex items-center gap-4">
-          <button
-            (click)="showView('menu')"
-            class="px-4 py-2 text-[#6366f1] hover:bg-indigo-50 rounded-lg font-medium transition-colors"
-          >
-            Menú
-          </button>
-          <button
-            (click)="logout()"
-            class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-semibold transition-colors"
-          >
-            Cerrar Sesión
-          </button>
-        </div>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Loading Spinner -->
-  <div *ngIf="loading" class="flex justify-center items-center py-20">
-    <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-[#6366f1]"></div>
-  </div>
-
-  <!-- Menu Principal -->
-  <div *ngIf="currentView === 'menu' && !loading" class="max-w-7xl mx-auto px-4 py-8">
-    <div class="text-center mb-10">
-      <h2 class="text-3xl font-bold text-[#3730A3] mb-2">Bienvenido al Dashboard</h2>
-      <p class="text-gray-600">Gestiona tus propiedades y perfil desde aquí</p>
+<section class="min-h-screen bg-gray-50 p-6">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-10">
+      <h1 class="text-3xl font-bold text-gray-900">Dashboard Inmobiliaria</h1>
+      <button
+        (click)="logout()"
+        class="bg-red-400 hover:bg-red-500 text-white px-4 py-2 rounded-lg font-semibold transition-colors cursor-pointer"
+      >
+        Cerrar Sesión
+      </button>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      <!-- Card Propiedades -->
-      <div class="bg-white rounded-2xl shadow-xl p-8 hover:shadow-2xl transition-shadow">
-        <div class="flex items-center mb-6">
-          <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center mr-4">
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-            </svg>
-          </div>
-          <h2 class="text-2xl font-bold text-gray-900">Propiedades</h2>
-        </div>
+    <!-- Loading Spinner -->
+    <div *ngIf="loading" class="flex justify-center items-center py-12">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+    </div>
+
+    <!-- Menu Principal -->
+    <div *ngIf="currentView === 'menu' && !loading" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <!-- Propiedades -->
+      <div class="bg-white rounded-xl shadow-lg p-6">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">Propiedades</h2>
         <div class="space-y-3">
           <button
             (click)="showView('list')"
-            class="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-4 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg"
+            class="w-full bg-blue-300 hover:bg-blue-400 text-gray-900 px-4 py-2 rounded-lg font-semibold transition-colors cursor-pointer"
           >
-            📋 Listar Propiedades
+            Listar Propiedades
           </button>
           <button
             (click)="showView('create')"
-            class="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-4 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg"
+            class="w-full bg-green-300 hover:bg-green-400 text-gray-900 px-4 py-2 rounded-lg font-semibold transition-colors cursor-pointer"
           >
-            ➕ Crear Propiedad
+            Crear Propiedad
           </button>
           <button
             (click)="showView('search')"
-            class="w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white px-4 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg"
+            class="w-full bg-purple-300 hover:bg-purple-400 text-gray-900 px-4 py-2 rounded-lg font-semibold transition-colors cursor-pointer"
           >
-            🔍 Buscar Propiedades
+            Buscar Propiedades
           </button>
           <button
             (click)="loadAvailableProperties()"
-            class="w-full bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-600 hover:to-cyan-700 text-white px-4 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg"
+            class="w-full bg-cyan-300 hover:bg-cyan-400 text-gray-900 px-4 py-2 rounded-lg font-semibold transition-colors cursor-pointer"
           >
-            ✓ Ver Disponibles
+            Ver Disponibles
           </button>
         </div>
       </div>
 
-      <!-- Card Perfil -->
-      <div class="bg-white rounded-2xl shadow-xl p-8 hover:shadow-2xl transition-shadow">
-        <div class="flex items-center mb-6">
-          <div class="w-12 h-12 bg-gradient-to-br from-indigo-400 to-indigo-600 rounded-xl flex items-center justify-center mr-4">
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-            </svg>
-          </div>
-          <h2 class="text-2xl font-bold text-gray-900">Perfil & Usuarios</h2>
-        </div>
+      <!-- Perfil -->
+      <div class="bg-white rounded-xl shadow-lg p-6">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">Perfil</h2>
         <div class="space-y-3">
-          <button
-            (click)="showView('profile')"
-            class="w-full bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white px-4 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg"
+          <a
+            [routerLink]="['/dashboard']"
+            class="w-full bg-blue-300 hover:bg-blue-400 text-gray-900 px-4 py-2 rounded-lg font-semibold transition-colors cursor-pointer flex items-center justify-center"
           >
-            👤 Ver Perfil
-          </button>
-          <button
-            class="w-full bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white px-4 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg"
+            Ver Perfil
+          </a>
+          <a
+            [routerLink]="['/dashboard']"
+            class="w-full bg-yellow-200 hover:bg-yellow-300 text-gray-900 px-4 py-2 rounded-lg font-semibold transition-colors cursor-pointer flex items-center justify-center"
           >
-            ✏️ Editar Perfil
-          </button>
+            Editar Perfil
+          </a>
+          <a
+            [routerLink]="['/dashboard']"
+            class="w-full bg-red-300 hover:bg-red-400 text-gray-900 px-4 py-2 rounded-lg font-semibold transition-colors cursor-pointer flex items-center justify-center"
+          >
+            Eliminar Cuenta
+          </a>
           <button
             (click)="buscarUsuarioPorId()"
-            class="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white px-4 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg"
+            class="w-full bg-emerald-200 hover:bg-emerald-300 text-gray-900 px-4 py-2 rounded-lg font-semibold transition-colors cursor-pointer"
           >
-            🔎 Buscar Usuario
+            Buscar Usuario por ID
           </button>
           <a
             [routerLink]="['/users']"
-            class="w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white px-4 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg flex items-center justify-center"
+            class="w-full bg-purple-200 hover:bg-purple-300 text-gray-900 px-4 py-2 rounded-lg font-semibold transition-colors cursor-pointer flex items-center justify-center"
           >
-            📊 Listar Usuarios
+            Listar Usuarios
           </a>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Lista de Propiedades -->
-  <div *ngIf="currentView === 'list' && !loading" class="max-w-7xl mx-auto px-4 py-8">
-    <div class="flex justify-between items-center mb-8">
-      <h2 class="text-3xl font-bold text-[#3730A3]">Mis Propiedades</h2>
-      <button
-        (click)="showView('menu')"
-        class="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-xl font-semibold transition-colors"
-      >
-        ← Volver
-      </button>
-    </div>
+    <!-- Lista de Propiedades -->
+    <div *ngIf="currentView === 'list' && !loading">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-gray-900">Lista de Propiedades</h2>
+        <button
+          (click)="showView('menu')"
+          class="bg-gray-300 hover:bg-gray-400 text-gray-900 px-4 py-2 rounded-lg font-semibold transition-colors"
+        >
+          Volver al Menú
+        </button>
+      </div>
 
-    <div *ngIf="properties.length === 0" class="bg-white rounded-2xl shadow-xl p-12 text-center">
-      <div class="text-6xl mb-4">🏠</div>
-      <p class="text-gray-500 text-xl">No hay propiedades disponibles</p>
-      <button
-        (click)="showView('create')"
-        class="mt-6 px-6 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all"
-      >
-        Crear primera propiedad
-      </button>
-    </div>
+      <div *ngIf="properties.length === 0" class="bg-white rounded-xl shadow-lg p-8 text-center">
+        <p class="text-gray-500 text-lg">No hay propiedades disponibles</p>
+      </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div *ngFor="let property of properties" class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all transform hover:-translate-y-1">
-        <!-- Imagen placeholder con gradiente -->
-        <div class="h-48 bg-gradient-to-br from-indigo-400 via-purple-400 to-pink-400 flex items-center justify-center">
-          <span class="text-6xl">🏠</span>
-        </div>
-        
-        <div class="p-6">
-          <div class="flex justify-between items-start mb-3">
-            <h3 class="text-xl font-bold text-gray-900 line-clamp-1">{{ property.title }}</h3>
-            <span 
-              [class]="property.available ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'"
-              class="px-3 py-1 rounded-full text-xs font-bold"
-            >
-              {{ property.available ? '✓ Disponible' : '✗ No disponible' }}
-            </span>
-          </div>
-          
-          <p class="text-gray-600 text-sm mb-4 line-clamp-2 h-10">{{ property.description }}</p>
-          
-          <div class="space-y-3 mb-4">
-            <p class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              ${{ property.price | number }}
-            </p>
-            <div class="flex items-center text-sm text-gray-600">
-              <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-              </svg>
-              <span class="font-semibold">{{ property.city }}</span>, {{ property.state }}
-            </div>
-            <p class="text-sm text-gray-500">{{ property.address }}</p>
-            <div class="flex gap-4 text-sm text-gray-700 font-medium">
-              <span>🛏️ {{ property.bedrooms }}</span>
-              <span>🚿 {{ property.bathrooms }}</span>
-              <span>📐 {{ property.area }}m²</span>
-              <span>🚗 {{ property.garages }}</span>
-            </div>
-            <div class="flex gap-2 flex-wrap">
-              <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-semibold">
-                {{ property.propertyType }}
-              </span>
-              <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-semibold">
-                {{ property.transactionType }}
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div *ngFor="let property of properties" class="bg-white rounded-xl shadow-lg overflow-hidden">
+          <div class="p-6">
+            <div class="flex justify-between items-start mb-3">
+              <h3 class="text-xl font-bold text-gray-900">{{ property.title }}</h3>
+              <span 
+                [class]="property.available ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'"
+                class="px-2 py-1 rounded-full text-xs font-semibold"
+              >
+                {{ property.available ? 'Disponible' : 'No disponible' }}
               </span>
             </div>
+            
+            <p class="text-gray-600 text-sm mb-4 line-clamp-2">{{ property.description }}</p>
+            
+            <div class="space-y-2 mb-4">
+              <p class="text-2xl font-bold text-blue-600">${{ property.price | number }}</p>
+              <p class="text-sm text-gray-500">
+                <span class="font-semibold">{{ property.city }}</span>, {{ property.state }}
+              </p>
+              <p class="text-sm text-gray-500">{{ property.address }}</p>
+              <div class="flex gap-4 text-sm text-gray-600">
+                <span>🛏️ {{ property.bedrooms }} hab</span>
+                <span>🚿 {{ property.bathrooms }} baños</span>
+                <span>📐 {{ property.area }} m²</span>
+              </div>
+              <div class="flex gap-2">
+                <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">
+                  {{ property.propertyType }}
+                </span>
+                <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded text-xs">
+                  {{ property.transactionType }}
+                </span>
+              </div>
+            </div>
+
+            <div class="flex gap-2">
+              <button
+                (click)="selectPropertyForEdit(property)"
+                class="flex-1 bg-yellow-200 hover:bg-yellow-300 text-gray-900 px-3 py-2 rounded-lg font-semibold transition-colors text-sm"
+              >
+                Editar
+              </button>
+              <button
+                (click)="deleteProperty(property.id)"
+                class="flex-1 bg-red-300 hover:bg-red-400 text-gray-900 px-3 py-2 rounded-lg font-semibold transition-colors text-sm"
+              >
+                Eliminar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Crear Propiedad -->
+    <div *ngIf="currentView === 'create' && !loading">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-gray-900">Crear Nueva Propiedad</h2>
+        <button
+          (click)="showView('menu')"
+          class="bg-gray-300 hover:bg-gray-400 text-gray-900 px-4 py-2 rounded-lg font-semibold transition-colors"
+        >
+          Volver al Menú
+        </button>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-lg p-6">
+        <form (ngSubmit)="createProperty()" class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Título *</label>
+              <input
+                type="text"
+                [(ngModel)]="propertyForm.title"
+                name="title"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Precio *</label>
+              <input
+                type="number"
+                [(ngModel)]="propertyForm.price"
+                name="price"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
+              />
+            </div>
+
+            <div class="md:col-span-2">
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Descripción</label>
+              <textarea
+                [(ngModel)]="propertyForm.description"
+                name="description"
+                rows="3"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              ></textarea>
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Dirección</label>
+              <input
+                type="text"
+                [(ngModel)]="propertyForm.address"
+                name="address"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Ciudad *</label>
+              <input
+                type="text"
+                [(ngModel)]="propertyForm.city"
+                name="city"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Estado</label>
+              <input
+                type="text"
+                [(ngModel)]="propertyForm.state"
+                name="state"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Tipo de Propiedad</label>
+              <select
+                [(ngModel)]="propertyForm.propertyType"
+                name="propertyType"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="HOUSE">Casa</option>
+                <option value="APARTMENT">Apartamento</option>
+                <option value="LAND">Terreno</option>
+                <option value="COMMERCIAL">Comercial</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Tipo de Transacción</label>
+              <select
+                [(ngModel)]="propertyForm.transactionType"
+                name="transactionType"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="SALE">Venta</option>
+                <option value="RENT">Alquiler</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Habitaciones</label>
+              <input
+                type="number"
+                [(ngModel)]="propertyForm.bedrooms"
+                name="bedrooms"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Baños</label>
+              <input
+                type="number"
+                [(ngModel)]="propertyForm.bathrooms"
+                name="bathrooms"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Garajes</label>
+              <input
+                type="number"
+                [(ngModel)]="propertyForm.garages"
+                name="garages"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Área (m²)</label>
+              <input
+                type="number"
+                [(ngModel)]="propertyForm.area"
+                name="area"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">URL de Imagen</label>
+              <input
+                type="text"
+                [(ngModel)]="propertyForm.imageUrl"
+                name="imageUrl"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">ID de Usuario</label>
+              <input
+                type="number"
+                [(ngModel)]="propertyForm.userId"
+                name="userId"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <div class="flex items-center">
+              <input
+                type="checkbox"
+                [(ngModel)]="propertyForm.available"
+                name="available"
+                id="available"
+                class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              />
+              <label for="available" class="ml-2 text-sm font-semibold text-gray-700">
+                Disponible
+              </label>
+            </div>
           </div>
 
-          <div class="flex gap-2">
+          <div class="flex gap-4 pt-4">
             <button
-              (click)="selectPropertyForEdit(property)"
-              class="flex-1 bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-2 rounded-lg font-semibold transition-colors text-sm"
+              type="submit"
+              class="flex-1 bg-green-400 hover:bg-green-500 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
             >
-              ✏️ Editar
+              Crear Propiedad
             </button>
             <button
-              (click)="deleteProperty(property.id)"
-              class="flex-1 bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg font-semibold transition-colors text-sm"
+              type="button"
+              (click)="showView('menu')"
+              class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-900 px-6 py-3 rounded-lg font-semibold transition-colors"
             >
-              🗑️ Eliminar
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Editar Propiedad -->
+    <div *ngIf="currentView === 'edit' && !loading">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-gray-900">Editar Propiedad</h2>
+        <button
+          (click)="showView('list')"
+          class="bg-gray-300 hover:bg-gray-400 text-gray-900 px-4 py-2 rounded-lg font-semibold transition-colors"
+        >
+          Volver a la Lista
+        </button>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-lg p-6">
+        <form (ngSubmit)="updateProperty()" class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Título *</label>
+              <input
+                type="text"
+                [(ngModel)]="propertyForm.title"
+                name="title"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Precio *</label>
+              <input
+                type="number"
+                [(ngModel)]="propertyForm.price"
+                name="price"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
+              />
+            </div>
+
+            <div class="md:col-span-2">
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Descripción</label>
+              <textarea
+                [(ngModel)]="propertyForm.description"
+                name="description"
+                rows="3"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              ></textarea>
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Dirección</label>
+              <input
+                type="text"
+                [(ngModel)]="propertyForm.address"
+                name="address"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Ciudad *</label>
+              <input
+                type="text"
+                [(ngModel)]="propertyForm.city"
+                name="city"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Estado</label>
+              <input
+                type="text"
+                [(ngModel)]="propertyForm.state"
+                name="state"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Tipo de Propiedad</label>
+              <select
+                [(ngModel)]="propertyForm.propertyType"
+                name="propertyType"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="HOUSE">Casa</option>
+                <option value="APARTMENT">Apartamento</option>
+                <option value="LAND">Terreno</option>
+                <option value="COMMERCIAL">Comercial</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Tipo de Transacción</label>
+              <select
+                [(ngModel)]="propertyForm.transactionType"
+                name="transactionType"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="SALE">Venta</option>
+                <option value="RENT">Alquiler</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Habitaciones</label>
+              <input
+                type="number"
+                [(ngModel)]="propertyForm.bedrooms"
+                name="bedrooms"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Baños</label>
+              <input
+                type="number"
+                [(ngModel)]="propertyForm.bathrooms"
+                name="bathrooms"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Garajes</label>
+              <input
+                type="number"
+                [(ngModel)]="propertyForm.garages"
+                name="garages"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Área (m²)</label>
+              <input
+                type="number"
+                [(ngModel)]="propertyForm.area"
+                name="area"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">URL de Imagen</label>
+              <input
+                type="text"
+                [(ngModel)]="propertyForm.imageUrl"
+                name="imageUrl"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">ID de Usuario</label>
+              <input
+                type="number"
+                [(ngModel)]="propertyForm.userId"
+                name="userId"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <div class="flex items-center">
+              <input
+                type="checkbox"
+                [(ngModel)]="propertyForm.available"
+                name="available"
+                id="available-edit"
+                class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              />
+              <label for="available-edit" class="ml-2 text-sm font-semibold text-gray-700">
+                Disponible
+              </label>
+            </div>
+          </div>
+
+          <div class="flex gap-4 pt-4">
+            <button
+              type="submit"
+              class="flex-1 bg-yellow-400 hover:bg-yellow-500 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+            >
+              Actualizar Propiedad
+            </button>
+            <button
+              type="button"
+              (click)="showView('list')"
+              class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-900 px-6 py-3 rounded-lg font-semibold transition-colors"
+            >
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Búsqueda de Propiedades -->
+    <div *ngIf="currentView === 'search' && !loading">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-gray-900">Buscar Propiedades</h2>
+        <button
+          (click)="showView('menu')"
+          class="bg-gray-300 hover:bg-gray-400 text-gray-900 px-4 py-2 rounded-lg font-semibold transition-colors"
+        >
+          Volver al Menú
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Buscar por Ciudad -->
+        <div class="bg-white rounded-xl shadow-lg p-6">
+          <h3 class="text-xl font-bold text-gray-900 mb-4">Por Ciudad</h3>
+          <div class="space-y-3">
+            <input
+              type="text"
+              [(ngModel)]="searchCity"
+              placeholder="Ingresa la ciudad"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+            <button
+              (click)="searchByCity()"
+              class="w-full bg-blue-400 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
+            >
+              Buscar
+            </button>
+          </div>
+        </div>
+
+        <!-- Buscar por Tipo -->
+        <div class="bg-white rounded-xl shadow-lg p-6">
+          <h3 class="text-xl font-bold text-gray-900 mb-4">Por Tipo</h3>
+          <div class="space-y-3">
+            <select
+              [(ngModel)]="searchType"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              <option value="">Selecciona un tipo</option>
+              <option value="HOUSE">Casa</option>
+              <option value="APARTMENT">Apartamento</option>
+              <option value="LAND">Terreno</option>
+              <option value="COMMERCIAL">Comercial</option>
+            </select>
+            <button
+              (click)="searchByType()"
+              class="w-full bg-purple-400 hover:bg-purple-500 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
+            >
+              Buscar
+            </button>
+          </div>
+        </div>
+
+        <!-- Buscar por Transacción -->
+        <div class="bg-white rounded-xl shadow-lg p-6">
+          <h3 class="text-xl font-bold text-gray-900 mb-4">Por Transacción</h3>
+          <div class="space-y-3">
+            <select
+              [(ngModel)]="searchTransaction"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              <option value="">Selecciona un tipo</option>
+              <option value="SALE">Venta</option>
+              <option value="RENT">Alquiler</option>
+            </select>
+            <button
+              (click)="searchByTransaction()"
+              class="w-full bg-green-400 hover:bg-green-500 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
+            >
+              Buscar
+            </button>
+          </div>
+        </div>
+
+        <!-- Buscar por Rango de Precio -->
+        <div class="bg-white rounded-xl shadow-lg p-6">
+          <h3 class="text-xl font-bold text-gray-900 mb-4">Por Rango de Precio</h3>
+          <div class="space-y-3">
+            <input
+              type="number"
+              [(ngModel)]="minPrice"
+              placeholder="Precio mínimo"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+            <input
+              type="number"
+              [(ngModel)]="maxPrice"
+              placeholder="Precio máximo"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+            <button
+              (click)="searchByPriceRange()"
+              class="w-full bg-yellow-400 hover:bg-yellow-500 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
+            >
+              Buscar
             </button>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-
-  <!-- Crear Propiedad -->
-  <div *ngIf="currentView === 'create' && !loading" class="max-w-4xl mx-auto px-4 py-8">
-    <div class="flex justify-between items-center mb-8">
-      <h2 class="text-3xl font-bold text-[#3730A3]">Nueva Propiedad</h2>
-      <button
-        (click)="showView('menu')"
-        class="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-xl font-semibold transition-colors"
-      >
-        ← Volver
-      </button>
-    </div>
-
-    <div class="bg-white rounded-2xl shadow-xl p-8">
-      <form (ngSubmit)="createProperty()" class="space-y-6">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2">Título *</label>
-            <input
-              type="text"
-              [(ngModel)]="propertyForm.title"
-              name="title"
-              placeholder="Casa moderna en..."
-              class="w-full px-4 py-3 bg-[#eeeeff] border-2 border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6366f1] focus:border-transparent transition-all"
-              required
-            />
-          </div>
-
-          <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2">Precio *</label>
-            <input
-              type="number"
-              [(ngModel)]="propertyForm.price"
-              name="price"
-              placeholder="0"
-              class="w-full px-4 py-3 bg-[#eeeeff] border-2 border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6366f1] focus:border-transparent transition-all"
-              required
-            />
-          </div>
-
-          <div class="md:col-span-2">
-            <label class="block text-sm font-bold text-gray-700 mb-2">Descripción</label>
-            <textarea
-              [(ngModel)]="propertyForm.description"
-              name="description"
-              rows="4"
-              placeholder="Describe la propiedad..."
-              class="w-full px-4 py-3 bg-[#eeeeff] border-2 border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6366f1] focus:border-transparent transition-all resize-none"
-            ></textarea>
-          </div>
-
-          <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2">Dirección</label>
-            <input
-              type="text"
-              [(ngModel)]="propertyForm.address"
-              name="address"
-              placeholder="Calle 123 #45-67"
-              class="w-full px-4 py-3 bg-[#eeeeff] border-2 border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6366f1] focus:border-transparent transition-all"
-            />
-          </div>
-
-          <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2">Ciudad *</label>
-            <input
-              type="text"
-              [(ngModel)]="propertyForm.city"
-              name="city"
-              placeholder="Bogotá"
-              class="w-full px-4 py-3 bg-[#eeeeff] border-2 border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6366f1] focus:border-transparent transition-all"
-              required
-            />
-          </div>
-
-          <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2">Estado/Departamento</label>
-            <input
-              type="text"
-              [(ngModel)]="propertyForm.state"
-              name="state"
-              placeholder="Cundinamarca"
-              class="w-full px-4 py-3 bg-[#eeeeff] border-2 border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6366f1] focus:border-transparent transition-all"
-            />
-          </div>
-
-          <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2">Tipo de Propiedad</label>
-            <select
-              [(ngModel)]="propertyForm.propertyType"
-              name="propertyType"
-              class="w-full px-4 py-3 bg-[#eeeeff] border-2 border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6366f1] focus:border-transparent transition-all"
-            >
-              <option value="HOUSE">🏠 Casa</option>
-              <option value="APARTMENT">🏢 Apartamento</option>
-              <option value="LAND">🌳 Terreno</option>
-              <option value="COMMERCIAL">🏪 Comercial</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2">Tipo de Transacción</label>
-            <select
-              [(ngModel)]="propertyForm.transactionType"
-              name="transactionType"
-              class="w-full px-4 py-3 bg-[#eeeeff] border-2 border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6366f1] focus:border-transparent transition-all"
-            >
-              <option value="SALE">💰 Venta</option>
-              <option value="RENT">📅 Alquiler</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2">Habitaciones</label>
-            <input
-              type="number"
-              [(ngModel)]="propertyForm.bedrooms"
-              name="bedrooms"
-              placeholder="0"
-              class="w-full px-4 py-3 bg-[#eeeeff] border-2 border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6366f1] focus:border-transparent transition-all"
-            />
-          </div>
-
-          <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2">Baños</label>
-            <input
-              type="number"
-              [(ngModel)]="propertyForm.bathrooms"
-              name="bathrooms"
-              placeholder="0"
-              class="w-full px-4 py-3 bg-[#eeeeff] border-2 border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6366f1] focus:border-transparent transition-all"
-            />
-          </div>
-
-          <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2">Garajes</label>
-            <input
-              type="number"
-              [(ngModel)]="propertyForm.garages"
-              name="garages"
-              placeholder="0"
-              class="w-full px-4 py-3 bg-[#eeeeff] border-2 border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6366f1] focus:border-transparent transition-all"
-            />
-          </div>
-
-          <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2">Área (m²)</label>
-            <input
-              type="number"
-              [(ngModel)]="propertyForm.area"
-              name="area"
-              placeholder="0"
-              class="w-full px-4 py-3 bg-[#eeeeff] border-2 border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6366f1] focus:border-transparent transition-all"
-            />
-          </div>
-
-          <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2">URL de Imagen</label>
-            <input
-              type="text"
-              [(ngModel)]="propertyForm.imageUrl"
-              name="imageUrl"
-              placeholder="https://..."
-              class="w-full px-4 py-3 bg-[#eeeeff] border-2 border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6366f1] focus:border-transparent transition-all"
-            />
-          </div>
-
-          <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2">ID de Usuario</label>
-            <input
-              type="number"
-              [(ngModel)]="propertyForm.userId"
-              name="userId"
-              placeholder="0"
-              class="w-full px-4 py-3 bg-[#eeeeff] border-2 border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6366f1] focus:border-transparent transition-all"
-            />
-          </div>
-
-          <div class="flex items-center bg-[#eeeeff] rounded-xl px-4 py-3">
-            <input
-              type="checkbox"
-              [(ngModel)]="propertyForm.available"
-              name="available"
-              id="available"
-              class="w-5 h-5 text-[#6366f1] border-gray-300 rounded focus:ring-[#6366f1]"
-            />
-            <label for="available" class="ml-3 text-sm font-bold text-gray-700">
-              Propiedad disponible
-            </label>
-          </div>
-        </div>
-
-        <div class="flex gap-4 pt-6">
-          <button
-            type="submit"
-            class="flex-1 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-6 py-4 rounded-xl font-bold text-lg transition-all shadow-lg hover:shadow-xl"
-          >
-            ➕ Crear Propiedad
-          </button>
-          <button
-            type="button"
-            (click)="showView('menu')"
-            class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-4 rounded-xl font-bold text-lg transition-all"
-          >
-            Cancelar
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Vista de Búsqueda -->
-  <div *ngIf="currentView === 'search' && !loading" class="max-w-6xl mx-auto px-4 py-8">
-    <div class="flex justify-between items-center mb-8">
-      <h2 class="text-3xl font-bold text-[#3730A3]">Buscar Propiedades</h2>
-      <button
-        (click)="showView('menu')"
-        class="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-xl font-semibold transition-colors"
-      >
-        ← Volver
-      </button>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <!-- Por Ciudad -->
-      <div class="bg-white rounded-2xl shadow-xl p-6">
-        <div class="flex items-center mb-4">
-          <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg flex items-center justify-center mr-3">
-            <span class="text-xl">🏙️</span>
-          </div>
-          <h3 class="text-xl font-bold text-gray-900">Por Ciudad</h3>
-        </div>
-        <div class="space-y-3">
-          <input
-            type="text"
-            [(ngModel)]="searchCity"
-            placeholder="Ej: Bogotá, Medellín..."
-            class="w-full px-4 py-3 bg-[#eeeeff] rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-          />
-          <button
-            (click)="searchByCity()"
-            class="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-4 py-3 rounded-xl font-semibold transition-all shadow-lg"
-          >
-            🔍 Buscar
-          </button>
-        </div>
-      </div>
-
-      <!-- Por Tipo -->
-      <div class="bg-white rounded-2xl shadow-xl p-6">
-        <div class="flex items-center mb-4">
-          <div class="w-10 h-10 bg-gradient-to-br from-purple-400 to-purple-600 rounded-lg flex items-center justify-center mr-3">
-            <span class="text-xl">🏠</span>
-          </div>
-          <h3 class="text-xl font-bold text-gray-900">Por Tipo</h3>
-        </div>
-        <div class="space-y-3">
-          <select
-            [(ngModel)]="searchType"
-            class="w-full px-4 py-3 bg-[#eeeeff] rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
-          >
-            <option value="">Selecciona un tipo</option>
-            <option value="HOUSE">🏠 Casa</option>
-            <option value="APARTMENT">🏢 Apartamento</option>
-            <option value="LAND">🌳 Terreno</option>
-            <option value="COMMERCIAL">🏪 Comercial</option>
-          </select>
-          <button
-            (click)="searchByType()"
-            class="w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white px-4 py-3 rounded-xl font-semibold transition-all shadow-lg"
-          >
-            🔍 Buscar
-          </button>
-        </div>
-      </div>
-
-      <!-- Por Transacción -->
-      <div class="bg-white rounded-2xl shadow-xl p-6">
-        <div class="flex items-center mb-4">
-          <div class="w-10 h-10 bg-gradient-to-br from-green-400 to-green-600 rounded-lg flex items-center justify-center mr-3">
-            <span class="text-xl">💰</span>
-          </div>
-          <h3 class="text-xl font-bold text-gray-900">Por Transacción</h3>
-        </div>
-        <div class="space-y-3">
-          <select
-            [(ngModel)]="searchTransaction"
-            class="w-full px-4 py-3 bg-[#eeeeff] rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
-          >
-            <option value="">Selecciona un tipo</option>
-            <option value="SALE">💰 Venta</option>
-            <option value="RENT">📅 Alquiler</option>
-          </select>
-          <button
-            (click)="searchByTransaction()"
-            class="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-4 py-3 rounded-xl font-semibold transition-all shadow-lg"
-          >
-            🔍 Buscar
-          </button>
-        </div>
-      </div>
-
-      <!-- Por Rango de Precio -->
-      <div class="bg-white rounded-2xl shadow-xl p-6">
-        <div class="flex items-center mb-4">
-          <div class="w-10 h-10 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center mr-3">
-            <span class="text-xl">💵</span>
-          </div>
-          <h3 class="text-xl font-bold text-gray-900">Por Precio</h3>
-        </div>
-        <div class="space-y-3">
-          <input
-            type="number"
-            [(ngModel)]="minPrice"
-            placeholder="Precio mínimo"
-            class="w-full px-4 py-3 bg-[#eeeeff] rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500 transition-all"
-          />
-          <input
-            type="number"
-            [(ngModel)]="maxPrice"
-            placeholder="Precio máximo"
-            class="w-full px-4 py-3 bg-[#eeeeff] rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500 transition-all"
-          />
-          <button
-            (click)="searchByPriceRange()"
-            class="w-full bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white px-4 py-3 rounded-xl font-semibold transition-all shadow-lg"
-          >
-            🔍 Buscar
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Editar Propiedad (Igual a Crear pero con título diferente) -->
-  <div *ngIf="currentView === 'edit' && !loading" class="max-w-4xl mx-auto px-4 py-8">
-    <div class="flex justify-between items-center mb-8">
-      <h2 class="text-3xl font-bold text-[#3730A3]">Editar Propiedad</h2>
-      <button
-        (click)="showView('list')"
-        class="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-xl font-semibold transition-colors"
-      >
-        ← Volver a la Lista
-      </button>
-    </div>
-
-    <div class="bg-white rounded-2xl shadow-xl p-8">
-      <form (ngSubmit)="updateProperty()" class="space-y-6">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2">Título *</label>
-            <input
-              type="text"
-              [(ngModel)]="propertyForm.title"
-              name="title"
-              placeholder="Casa moderna en..."
-              class="w-full px-4 py-3 bg-[#eeeeff] border-2 border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6366f1] focus:border-transparent transition-all"
-              required
-            />
-          </div>
-
-          <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2">Precio *</label>
-            <input
-              type="number"
-              [(ngModel)]="propertyForm.price"
-              name="price"
-              placeholder="0"
-              class="w-full px-4 py-3 bg-[#eeeeff] border-2 border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6366f1] focus:border-transparent transition-all"
-              required
-            />
-          </div>
-
-          <div class="md:col-span-2">
-            <label class="block text-sm font-bold text-gray-700 mb-2">Descripción</label>
-            <textarea
-              [(ngModel)]="propertyForm.description"
-              name="description"
-              rows="4"
-              placeholder="Describe la propiedad..."
-              class="w-full px-4 py-3 bg-[#eeeeff] border-2 border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6366f1] focus:border-transparent transition-all resize-none"
-            ></textarea>
-          </div>
-
-          <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2">Dirección</label>
-            <input
-              type="text"
-              [(ngModel)]="propertyForm.address"
-              name="address"
-              placeholder="Calle 123 #45-67"
-              class="w-full px-4 py-3 bg-[#eeeeff] border-2 border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6366f1] focus:border-transparent transition-all"
-            />
-          </div>
-
-          <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2">Ciudad *</label>
-            <input
-              type="text"
-              [(ngModel)]="propertyForm.city"
-              name="city"
-              placeholder="Bogotá"
-              class="w-full px-4 py-3 bg-[#eeeeff] border-2 border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6366f1] focus:border-transparent transition-all"
-              required
-            />
-          </div>
-
-          <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2">Estado/Departamento</label>
-            <input
-              type="text"
-              [(ngModel)]="propertyForm.state"
-              name="state"
-              placeholder="Cundinamarca"
-              class="w-full px-4 py-3 bg-[#eeeeff] border-2 border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6366f1] focus:border-transparent transition-all"
-            />
-          </div>
-
-          <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2">Tipo de Propiedad</label>
-            <select
-              [(ngModel)]="propertyForm.propertyType"
-              name="propertyType"
-              class="w-full px-4 py-3 bg-[#eeeeff] border-2 border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6366f1] focus:border-transparent transition-all"
-            >
-              <option value="HOUSE">🏠 Casa</option>
-              <option value="APARTMENT">🏢 Apartamento</option>
-              <option value="LAND">🌳 Terreno</option>
-              <option value="COMMERCIAL">🏪 Comercial</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2">Tipo de Transacción</label>
-            <select
-              [(ngModel)]="propertyForm.transactionType"
-              name="transactionType"
-              class="w-full px-4 py-3 bg-[#eeeeff] border-2 border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6366f1] focus:border-transparent transition-all"
-            >
-              <option value="SALE">💰 Venta</option>
-              <option value="RENT">📅 Alquiler</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2">Habitaciones</label>
-            <input
-              type="number"
-              [(ngModel)]="propertyForm.bedrooms"
-              name="bedrooms"
-              placeholder="0"
-              class="w-full px-4 py-3 bg-[#eeeeff] border-2 border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6366f1] focus:border-transparent transition-all"
-            />
-          </div>
-
-          <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2">Baños</label>
-            <input
-              type="number"
-              [(ngModel)]="propertyForm.bathrooms"
-              name="bathrooms"
-              placeholder="0"
-              class="w-full px-4 py-3 bg-[#eeeeff] border-2 border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6366f1] focus:border-transparent transition-all"
-            />
-          </div>
-
-          <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2">Garajes</label>
-            <input
-              type="number"
-              [(ngModel)]="propertyForm.garages"
-              name="garages"
-              placeholder="0"
-              class="w-full px-4 py-3 bg-[#eeeeff] border-2 border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6366f1] focus:border-transparent transition-all"
-            />
-          </div>
-
-          <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2">Área (m²)</label>
-            <input
-              type="number"
-              [(ngModel)]="propertyForm.area"
-              name="area"
-              placeholder="0"
-              class="w-full px-4 py-3 bg-[#eeeeff] border-2 border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6366f1] focus:border-transparent transition-all"
-            />
-          </div>
-
-          <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2">URL de Imagen</label>
-            <input
-              type="text"
-              [(ngModel)]="propertyForm.imageUrl"
-              name="imageUrl"
-              placeholder="https://..."
-              class="w-full px-4 py-3 bg-[#eeeeff] border-2 border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6366f1] focus:border-transparent transition-all"
-            />
-          </div>
-
-          <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2">ID de Usuario</label>
-            <input
-              type="number"
-              [(ngModel)]="propertyForm.userId"
-              name="userId"
-              placeholder="0"
-              class="w-full px-4 py-3 bg-[#eeeeff] border-2 border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6366f1] focus:border-transparent transition-all"
-            />
-          </div>
-
-          <div class="flex items-center bg-[#eeeeff] rounded-xl px-4 py-3">
-            <input
-              type="checkbox"
-              [(ngModel)]="propertyForm.available"
-              name="available"
-              id="available-edit"
-              class="w-5 h-5 text-[#6366f1] border-gray-300 rounded focus:ring-[#6366f1]"
-            />
-            <label for="available-edit" class="ml-3 text-sm font-bold text-gray-700">
-              Propiedad disponible
-            </label>
-          </div>
-        </div>
-
-        <div class="flex gap-4 pt-6">
-          <button
-            type="submit"
-            class="flex-1 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white px-6 py-4 rounded-xl font-bold text-lg transition-all shadow-lg hover:shadow-xl"
-          >
-            ✏️ Actualizar Propiedad
-          </button>
-          <button
-            type="button"
-            (click)="showView('list')"
-            class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-4 rounded-xl font-bold text-lg transition-all"
-          >
-            Cancelar
-          </button>
-        </div>
-      </form>
     </div>
   </div>
 </section>
