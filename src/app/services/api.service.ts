@@ -58,6 +58,7 @@ export class ApiService {
   // POST /api/register
   registerUser(userData: UserRequest): Observable<UserResponse> {
     const url = `${this.apiUrl}/register`
+    console.log('[v0] Registrando usuario:', userData.email)
 
     return this.http
       .post<ApiResponse<UserResponse>>(url, userData, {
@@ -65,13 +66,18 @@ export class ApiService {
       })
       .pipe(
         map((response) => {
+          console.log('[v0] Respuesta completa del registro:', response)
+          const verificationToken = (response.data as any)?.verificationToken || (response as any).verificationToken
+          console.log('[v0] Token de verificación encontrado:', verificationToken)
+          
           return {
             ...response.data,
             message: response.message,
-            verificationToken: (response as any).verificationToken,
+            verificationToken: verificationToken,
           }
         }),
         catchError((error) => {
+          console.error('[v0] Error en registro:', error)
           return throwError(() => error)
         }),
       )
