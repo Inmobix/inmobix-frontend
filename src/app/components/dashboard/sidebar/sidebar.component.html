@@ -1,0 +1,69 @@
+<aside class="w-64 bg-white shadow-xl hidden md:flex flex-col z-10 h-full">
+  <div class="p-6 border-b border-gray-100">
+    <h1 class="text-2xl font-bold text-blue-600 flex items-center gap-2">
+      <iconify-icon icon="mdi:home-city" class="text-3xl"></iconify-icon>
+      Inmobix
+    </h1>
+    <p class="text-xs text-gray-500 mt-1">Gestión Inmobiliaria</p>
+  </div>
+
+  <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+    <a
+      routerLink="/dashboard/home"
+      routerLinkActive="bg-blue-50 text-blue-600"
+      class="w-full flex items-center gap-3 px-4 py-3 text-gray-600 rounded-xl hover:bg-gray-50 transition-all duration-200 group cursor-pointer"
+    >
+      <iconify-icon icon="mdi:view-dashboard" class="text-xl group-hover:text-blue-600 transition-colors"></iconify-icon>
+      <span class="font-medium">Dashboard</span>
+    </a>
+
+    <a
+      routerLink="/dashboard/properties"
+      routerLinkActive="bg-blue-50 text-blue-600"
+      class="w-full flex items-center gap-3 px-4 py-3 text-gray-600 rounded-xl hover:bg-gray-50 transition-all duration-200 group cursor-pointer"
+    >
+      <iconify-icon icon="mdi:home-group" class="text-xl group-hover:text-blue-600 transition-colors"></iconify-icon>
+      <span class="font-medium">Propiedades</span>
+    </a>
+
+    <a
+      routerLink="/dashboard/create-property"
+      routerLinkActive="bg-blue-50 text-blue-600"
+      class="w-full flex items-center gap-3 px-4 py-3 text-gray-600 rounded-xl hover:bg-gray-50 transition-all duration-200 group cursor-pointer"
+    >
+      <iconify-icon icon="mdi:plus-circle" class="text-xl group-hover:text-blue-600 transition-colors"></iconify-icon>
+      <span class="font-medium">Nueva Propiedad</span>
+    </a>
+
+    <a
+      routerLink="/dashboard/search"
+      routerLinkActive="bg-blue-50 text-blue-600"
+      class="w-full flex items-center gap-3 px-4 py-3 text-gray-600 rounded-xl hover:bg-gray-50 transition-all duration-200 group cursor-pointer"
+    >
+      <iconify-icon icon="mdi:magnify" class="text-xl group-hover:text-blue-600 transition-colors"></iconify-icon>
+      <span class="font-medium">Buscar</span>
+    </a>
+
+    <div class="pt-4 mt-4 border-t border-gray-100">
+      <p class="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Cuenta</p>
+      <a
+        routerLink="/dashboard/profile"
+        routerLinkActive="bg-blue-50 text-blue-600"
+        class="w-full flex items-center gap-3 px-4 py-3 text-gray-600 rounded-xl hover:bg-gray-50 transition-all duration-200 group cursor-pointer"
+      >
+        <iconify-icon icon="mdi:account" class="text-xl group-hover:text-blue-600 transition-colors"></iconify-icon>
+        <span class="font-medium">Mi Perfil</span>
+      </a>
+    </div>
+  </nav>
+
+  <div class="p-4 border-t border-gray-100">
+    <button
+      (click)="logout()"
+      class="w-full flex items-center gap-3 px-4 py-3 text-red-600 rounded-xl hover:bg-red-50 transition-all duration-200"
+    >
+      <iconify-icon icon="mdi:logout" class="text-xl"></iconify-icon>
+      <span class="font-medium">Cerrar Sesión</span>
+    </button>
+  </div>
+</aside>
