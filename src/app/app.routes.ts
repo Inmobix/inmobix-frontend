@@ -13,6 +13,11 @@ import { LocationPropertiesComponent } from "./estructrales/location-properties/
 import { HeroComponent } from "./estructrales/hero/hero.component"
 import { PropertyBenefitsComponent } from "./estructrales/property-benefits/property-benefits.component"
 import { ResetPasswordComponent } from "./components/auth/reset-password/reset-password.component"
+import { DashboardHomeComponent } from "./components/dashboard/dashboard-home/dashboard-home.component"
+import { PropertyListComponent } from "./components/dashboard/property-list/property-list.component"
+import { PropertyFormComponent } from "./components/dashboard/property-form/property-form.component"
+import { SearchComponent } from "./components/dashboard/search/search.component"
+import { ProfileComponent } from "./components/dashboard/profile/profile.component"
 
 export const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -27,7 +32,20 @@ export const routes: Routes = [
   { path: "forgot-password", component: ForgotPasswordComponent },
   { path: "reset-password", component: ResetPasswordComponent },
   { path: "verify-email", component: VerifyEmailComponent },
-  { path: "dashboard", component: DashboardComponent, canActivate: [AuthGuard] },
+  { 
+    path: "dashboard", 
+    component: DashboardComponent, 
+    canActivate: [AuthGuard],
+    children: [
+      { path: '', redirectTo: 'home', pathMatch: 'full' },
+      { path: 'home', component: DashboardHomeComponent },
+      { path: 'properties', component: PropertyListComponent },
+      { path: 'create-property', component: PropertyFormComponent },
+      { path: 'edit-property/:id', component: PropertyFormComponent },
+      { path: 'search', component: SearchComponent },
+      { path: 'profile', component: ProfileComponent }
+    ]
+  },
   { path: "users", component: UserListComponent, canActivate: [AuthGuard] },
   { path: "**", redirectTo: "" },
 ]

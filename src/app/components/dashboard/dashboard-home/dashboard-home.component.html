@@ -1,0 +1,102 @@
+<div class="space-y-8">
+  <div class="flex justify-between items-end">
+    <div>
+      <h2 class="text-3xl font-bold text-gray-900">Bienvenido de nuevo</h2>
+      <p class="text-gray-500 mt-1">Aquí tienes un resumen de tu actividad inmobiliaria.</p>
+    </div>
+    <a routerLink="/dashboard/create-property" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg shadow-blue-200 transition-all flex items-center gap-2 cursor-pointer">
+      <iconify-icon icon="mdi:plus"></iconify-icon>
+      Nueva Propiedad
+    </a>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+      <div class="flex items-center gap-4">
+        <div class="p-3 bg-blue-50 text-blue-600 rounded-xl">
+          <iconify-icon icon="mdi:home-analytics" class="text-2xl"></iconify-icon>
+        </div>
+        <div>
+          <p class="text-sm text-gray-500 font-medium">Total Propiedades</p>
+          <h3 class="text-2xl font-bold text-gray-900">{{ properties.length }}</h3>
+        </div>
+      </div>
+    </div>
+    
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+      <div class="flex items-center gap-4">
+        <div class="p-3 bg-green-50 text-green-600 rounded-xl">
+          <iconify-icon icon="mdi:check-circle" class="text-2xl"></iconify-icon>
+        </div>
+        <div>
+          <p class="text-sm text-gray-500 font-medium">Disponibles</p>
+          <h3 class="text-2xl font-bold text-gray-900">{{ properties.length }}</h3> <!-- Placeholder logic -->
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+      <div class="flex items-center gap-4">
+        <div class="p-3 bg-purple-50 text-purple-600 rounded-xl">
+          <iconify-icon icon="mdi:account-group" class="text-2xl"></iconify-icon>
+        </div>
+        <div>
+          <p class="text-sm text-gray-500 font-medium">Clientes Potenciales</p>
+          <h3 class="text-2xl font-bold text-gray-900">12</h3> <!-- Mock data -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Properties Preview -->
+  <div>
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="text-xl font-bold text-gray-900">Propiedades Recientes</h3>
+      <a routerLink="/dashboard/properties" class="text-blue-600 hover:text-blue-700 font-medium text-sm cursor-pointer">Ver todas</a>
+    </div>
+    
+    <!-- Loading State -->
+    <div *ngIf="loading" class="flex flex-col justify-center items-center py-10">
+      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-2"></div>
+      <p class="text-gray-500 text-sm">Cargando...</p>
+    </div>
+
+    <div *ngIf="!loading && properties.length === 0" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center">
+      <p class="text-gray-500">No hay propiedades recientes.</p>
+    </div>
+
+    <div *ngIf="!loading && properties.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div *ngFor="let property of properties | slice:0:3" class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 group">
+        <!-- Image Area -->
+        <div class="relative h-48 bg-gray-200 overflow-hidden">
+          <img 
+            [src]="property.imageUrl || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1073&q=80'" 
+            alt="{{ property.title }}"
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          >
+          <div class="absolute top-3 left-3 flex gap-2">
+            <span 
+              [class]="property.transactionType === 'SALE' ? 'bg-blue-600' : 'bg-purple-600'"
+              class="text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm"
+            >
+              {{ property.transactionType === 'SALE' ? 'VENTA' : 'ALQUILER' }}
+            </span>
+          </div>
+          <div class="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-lg shadow-sm">
+            <p class="text-blue-900 font-bold">${{ property.price | number }}</p>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="p-5">
+          <h3 class="text-lg font-bold text-gray-900 mb-1 truncate">{{ property.title }}</h3>
+          <p class="text-gray-500 text-sm mb-4 flex items-center gap-1">
+            <iconify-icon icon="mdi:map-marker" class="text-gray-400"></iconify-icon>
+            {{ property.city }}, {{ property.state }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

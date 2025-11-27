@@ -1,0 +1,100 @@
+<div class="space-y-8">
+  <div class="flex justify-between items-center mb-8">
+    <div>
+      <h2 class="text-2xl font-bold text-gray-900">Mis Propiedades</h2>
+      <p class="text-gray-500">Gestiona tu inventario inmobiliario</p>
+    </div>
+    <div class="flex gap-3">
+      <button (click)="loadAvailableProperties()" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50">
+        Solo Disponibles
+      </button>
+      <a routerLink="/dashboard/create-property" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium shadow-sm transition-colors flex items-center gap-2 cursor-pointer">
+        <iconify-icon icon="mdi:plus"></iconify-icon> Agregar
+      </a>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="flex flex-col justify-center items-center py-20">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
+    <p class="text-gray-500 animate-pulse">Cargando...</p>
+  </div>
+
+  <div *ngIf="!loading && properties.length === 0" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center">
+    <div class="bg-gray-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+      <iconify-icon icon="mdi:home-search" class="text-3xl text-gray-400"></iconify-icon>
+    </div>
+    <h3 class="text-lg font-medium text-gray-900">No hay propiedades</h3>
+    <p class="text-gray-500 mt-1 mb-6">Comienza agregando tu primera propiedad al sistema.</p>
+    <a routerLink="/dashboard/create-property" class="text-blue-600 font-medium hover:underline cursor-pointer">Crear propiedad ahora</a>
+  </div>
+
+  <div *ngIf="!loading && properties.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div *ngFor="let property of properties" class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 group">
+      <!-- Image Area -->
+      <div class="relative h-48 bg-gray-200 overflow-hidden">
+        <img 
+          [src]="property.imageUrl || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1073&q=80'" 
+          alt="{{ property.title }}"
+          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+        >
+        <div class="absolute top-3 left-3 flex gap-2">
+          <span 
+            [class]="property.transactionType === 'SALE' ? 'bg-blue-600' : 'bg-purple-600'"
+            class="text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm"
+          >
+            {{ property.transactionType === 'SALE' ? 'VENTA' : 'ALQUILER' }}
+          </span>
+          <span 
+            *ngIf="!property.available"
+            class="bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm"
+          >
+            NO DISPONIBLE
+          </span>
+        </div>
+        <div class="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-lg shadow-sm">
+          <p class="text-blue-900 font-bold">${{ property.price | number }}</p>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="p-5">
+        <h3 class="text-lg font-bold text-gray-900 mb-1 truncate">{{ property.title }}</h3>
+        <p class="text-gray-500 text-sm mb-4 flex items-center gap-1">
+          <iconify-icon icon="mdi:map-marker" class="text-gray-400"></iconify-icon>
+          {{ property.city }}, {{ property.state }}
+        </p>
+
+        <div class="grid grid-cols-3 gap-2 py-3 border-t border-gray-100 mb-4">
+          <div class="text-center">
+            <p class="text-gray-400 text-xs uppercase tracking-wider">Hab</p>
+            <p class="font-semibold text-gray-700 flex items-center justify-center gap-1">
+              <iconify-icon icon="mdi:bed" class="text-blue-500"></iconify-icon> {{ property.bedrooms }}
+            </p>
+          </div>
+          <div class="text-center border-l border-gray-100">
+            <p class="text-gray-400 text-xs uppercase tracking-wider">Baños</p>
+            <p class="font-semibold text-gray-700 flex items-center justify-center gap-1">
+              <iconify-icon icon="mdi:shower" class="text-blue-500"></iconify-icon> {{ property.bathrooms }}
+            </p>
+          </div>
+          <div class="text-center border-l border-gray-100">
+            <p class="text-gray-400 text-xs uppercase tracking-wider">Área</p>
+            <p class="font-semibold text-gray-700 flex items-center justify-center gap-1">
+              <iconify-icon icon="mdi:ruler-square" class="text-blue-500"></iconify-icon> {{ property.area }}m²
+            </p>
+          </div>
+        </div>
+
+        <div class="flex gap-2">
+          <a [routerLink]="['/dashboard/edit-property', property.id]" class="flex-1 bg-gray-50 hover:bg-gray-100 text-gray-700 py-2 rounded-lg text-sm font-medium transition-colors border border-gray-200 text-center cursor-pointer">
+            Editar
+          </a>
+          <button (click)="deleteProperty(property.id)" class="flex-1 bg-red-50 hover:bg-red-100 text-red-600 py-2 rounded-lg text-sm font-medium transition-colors border border-red-100">
+            Eliminar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

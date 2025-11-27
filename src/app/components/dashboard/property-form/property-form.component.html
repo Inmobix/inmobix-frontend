@@ -1,0 +1,141 @@
+<div class="max-w-3xl mx-auto">
+  <div class="flex items-center gap-4 mb-8">
+    <a routerLink="/dashboard/properties" class="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500 cursor-pointer">
+      <iconify-icon icon="mdi:arrow-left" class="text-2xl"></iconify-icon>
+    </a>
+    <div>
+      <h2 class="text-2xl font-bold text-gray-900">{{ isEditing ? 'Editar Propiedad' : 'Nueva Propiedad' }}</h2>
+      <p class="text-gray-500">Completa la información para publicar.</p>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <form (ngSubmit)="saveProperty()" class="p-8 space-y-8">
+      
+      <!-- Basic Info -->
+      <div class="space-y-6">
+        <h3 class="text-lg font-semibold text-gray-900 border-b border-gray-100 pb-2">Información Básica</h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Título del anuncio</label>
+            <input type="text" [(ngModel)]="propertyForm.title" name="title" required
+              class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all outline-none"
+              placeholder="Ej: Hermosa casa en el centro">
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Precio</label>
+            <div class="relative">
+              <span class="absolute left-4 top-3.5 text-gray-400">$</span>
+              <input type="number" [(ngModel)]="propertyForm.price" name="price" required
+                class="w-full pl-8 pr-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all outline-none">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Tipo de Transacción</label>
+            <select [(ngModel)]="propertyForm.transactionType" name="transactionType"
+              class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all outline-none bg-white">
+              <option value="SALE">Venta</option>
+              <option value="RENT">Alquiler</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Tipo de Propiedad</label>
+            <select [(ngModel)]="propertyForm.propertyType" name="propertyType"
+              class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all outline-none bg-white">
+              <option value="HOUSE">Casa</option>
+              <option value="APARTMENT">Apartamento</option>
+              <option value="LAND">Terreno</option>
+              <option value="COMMERCIAL">Comercial</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Área (m²)</label>
+            <input type="number" [(ngModel)]="propertyForm.area" name="area"
+              class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all outline-none">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Descripción</label>
+          <textarea [(ngModel)]="propertyForm.description" name="description" rows="4"
+            class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all outline-none resize-none"
+            placeholder="Describe los detalles más atractivos de la propiedad..."></textarea>
+        </div>
+      </div>
+
+      <!-- Location -->
+      <div class="space-y-6">
+        <h3 class="text-lg font-semibold text-gray-900 border-b border-gray-100 pb-2">Ubicación</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Dirección</label>
+            <input type="text" [(ngModel)]="propertyForm.address" name="address"
+              class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all outline-none">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Ciudad</label>
+            <input type="text" [(ngModel)]="propertyForm.city" name="city" required
+              class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all outline-none">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Departamento/Estado</label>
+            <input type="text" [(ngModel)]="propertyForm.state" name="state"
+              class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all outline-none">
+          </div>
+        </div>
+      </div>
+
+      <!-- Details -->
+      <div class="space-y-6">
+        <h3 class="text-lg font-semibold text-gray-900 border-b border-gray-100 pb-2">Detalles y Amenidades</h3>
+        <div class="grid grid-cols-3 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Habitaciones</label>
+            <input type="number" [(ngModel)]="propertyForm.bedrooms" name="bedrooms"
+              class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all outline-none">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Baños</label>
+            <input type="number" [(ngModel)]="propertyForm.bathrooms" name="bathrooms"
+              class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all outline-none">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Garajes</label>
+            <input type="number" [(ngModel)]="propertyForm.garages" name="garages"
+              class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all outline-none">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">URL de la Imagen</label>
+          <input type="text" [(ngModel)]="propertyForm.imageUrl" name="imageUrl"
+            class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all outline-none"
+            placeholder="https://ejemplo.com/imagen.jpg">
+        </div>
+
+        <div class="flex items-center gap-3 p-4 bg-gray-50 rounded-xl border border-gray-100">
+          <input type="checkbox" [(ngModel)]="propertyForm.available" name="available" id="available"
+            class="w-5 h-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500">
+          <label for="available" class="text-sm font-medium text-gray-700">Marcar como disponible públicamente</label>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex gap-4 pt-4 border-t border-gray-100">
+        <a routerLink="/dashboard/properties"
+          class="flex-1 px-6 py-3 rounded-xl border border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 transition-colors text-center cursor-pointer">
+          Cancelar
+        </a>
+        <button type="submit" [disabled]="loading"
+          class="flex-1 px-6 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 shadow-lg shadow-blue-200 transition-all disabled:opacity-50">
+          {{ loading ? 'Guardando...' : (isEditing ? 'Guardar Cambios' : 'Publicar Propiedad') }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
