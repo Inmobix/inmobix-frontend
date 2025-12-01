@@ -34,6 +34,7 @@ export interface ResetPasswordWithTokenRequest {
 export interface UserUpdateRequest {
   name?: string
   username?: string
+  email?: string
   phone?: string
   birthDate?: string
   documento?: string

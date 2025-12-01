@@ -18,6 +18,7 @@ import { PropertyListComponent } from "./components/dashboard/property-list/prop
 import { PropertyFormComponent } from "./components/dashboard/property-form/property-form.component"
 import { SearchComponent } from "./components/dashboard/search/search.component"
 import { ProfileComponent } from "./components/dashboard/profile/profile.component"
+import { AdminComponent } from "./components/dashboard/admin/admin.component"
 
 export const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -43,9 +44,10 @@ export const routes: Routes = [
       { path: 'create-property', component: PropertyFormComponent },
       { path: 'edit-property/:id', component: PropertyFormComponent },
       { path: 'search', component: SearchComponent },
-      { path: 'profile', component: ProfileComponent }
+      { path: 'profile', component: ProfileComponent },
+      { path: 'admin', component: AdminComponent },
+      { path: 'users', component: UserListComponent }
     ]
   },
-  { path: "users", component: UserListComponent, canActivate: [AuthGuard] },
   { path: "**", redirectTo: "" },
 ]

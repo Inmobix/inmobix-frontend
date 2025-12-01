@@ -37,7 +37,6 @@ export class SearchComponent {
         this.loading = false;
       },
       error: (error) => {
-        console.error("Error en búsqueda:", error);
         Swal.fire("Error", "No se pudo realizar la búsqueda", "error");
         this.loading = false;
       },
@@ -56,7 +55,6 @@ export class SearchComponent {
         this.loading = false;
       },
       error: (error) => {
-        console.error("Error en búsqueda:", error);
         Swal.fire("Error", "No se pudo realizar la búsqueda", "error");
         this.loading = false;
       },
@@ -75,7 +73,6 @@ export class SearchComponent {
         this.loading = false;
       },
       error: (error) => {
-        console.error("Error en búsqueda:", error);
         Swal.fire("Error", "No se pudo realizar la búsqueda", "error");
         this.loading = false;
       },
@@ -94,7 +91,6 @@ export class SearchComponent {
         this.loading = false;
       },
       error: (error) => {
-        console.error("Error en búsqueda:", error);
         Swal.fire("Error", "No se pudo realizar la búsqueda", "error");
         this.loading = false;
       },

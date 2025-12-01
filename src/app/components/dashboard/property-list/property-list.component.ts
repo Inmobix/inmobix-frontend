@@ -30,7 +30,6 @@ export class PropertyListComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error al cargar propiedades:', error);
         Swal.fire('Error', 'No se pudieron cargar las propiedades', 'error');
         this.loading = false;
       }
@@ -45,7 +44,6 @@ export class PropertyListComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error al cargar propiedades disponibles:', error);
         Swal.fire('Error', 'No se pudieron cargar las propiedades disponibles', 'error');
         this.loading = false;
       }
@@ -72,7 +70,6 @@ export class PropertyListComponent implements OnInit {
             this.loading = false;
           },
           error: (error) => {
-            console.error('Error al eliminar propiedad:', error);
             Swal.fire('Error', 'No se pudo eliminar la propiedad', 'error');
             this.loading = false;
           },
