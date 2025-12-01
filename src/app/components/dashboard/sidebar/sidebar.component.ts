@@ -13,6 +13,10 @@ import { AuthService } from '../../../services/auth.service';
 export class SidebarComponent {
   constructor(private authService: AuthService, private router: Router) {}
 
+  isAdmin(): boolean {
+    return this.authService.isAdmin();
+  }
+
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);

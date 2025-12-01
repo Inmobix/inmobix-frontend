@@ -4,7 +4,6 @@ import { FormsModule } from "@angular/forms"
 import { PropertyService } from "../../services/property.service"
 import { Property } from "../../models/property.model"
 
-// <CHANGE> Created a separate interface for display properties
 interface DisplayProperty {
   id: number
   title: string
@@ -29,7 +28,6 @@ interface DisplayProperty {
   styleUrls: ["./location-properties.component.css"],
 })
 export class LocationPropertiesComponent implements OnInit {
-  // Variables de colores y estilos
   colors = {
     primary: "#6366f1",
     secondary: "#1e293b",
@@ -42,11 +40,9 @@ export class LocationPropertiesComponent implements OnInit {
     popularBg: "#6366f1",
   }
 
-  // Filtros activos
   activeFilter: "todos" | "venta" | "alquiler" = "alquiler"
   searchTerm = ""
 
-  // Filtros por características
   minBeds: number | null = null
   maxBeds: number | null = null
   minBaths: number | null = null
@@ -56,7 +52,6 @@ export class LocationPropertiesComponent implements OnInit {
   minPrice: number | null = null
   maxPrice: number | null = null
 
-  // <CHANGE> Changed to DisplayProperty type
   properties: DisplayProperty[] = []
 
   loading = false
@@ -78,14 +73,12 @@ export class LocationPropertiesComponent implements OnInit {
         this.loading = false
       },
       error: (err) => {
-        console.error("Error al cargar propiedades:", err)
         this.error = "No se pudieron cargar las propiedades. Por favor, intenta de nuevo."
         this.loading = false
       },
     })
   }
 
-  // <CHANGE> Fixed mapping function with proper types
   private mapResponseToProperties(responses: Property[]): DisplayProperty[] {
     return responses.map((prop) => ({
       id: prop.id || 0,
@@ -104,17 +97,14 @@ export class LocationPropertiesComponent implements OnInit {
     }))
   }
 
-  // Cambiar filtro activo
   setFilter(filter: "todos" | "venta" | "alquiler"): void {
     this.activeFilter = filter
   }
 
-  // Alternar favorito
   toggleFavorite(property: DisplayProperty): void {
     property.isFavorite = !property.isFavorite
   }
 
-  // Limpiar todos los filtros
   clearFilters(): void {
     this.searchTerm = ""
     this.minBeds = null
@@ -128,16 +118,13 @@ export class LocationPropertiesComponent implements OnInit {
     this.activeFilter = "todos"
   }
 
-  // Filtrar propiedades según todos los criterios
   get filteredProperties(): DisplayProperty[] {
     let filtered = this.properties
 
-    // Filtrar por tipo
     if (this.activeFilter !== "todos") {
       filtered = filtered.filter((property) => property.type === this.activeFilter)
     }
 
-    // Filtrar por término de búsqueda
     if (this.searchTerm.trim()) {
       const searchLower = this.searchTerm.toLowerCase()
       filtered = filtered.filter(
@@ -146,7 +133,6 @@ export class LocationPropertiesComponent implements OnInit {
       )
     }
 
-    // Filtrar por habitaciones
     if (this.minBeds !== null) {
       filtered = filtered.filter((property) => property.beds >= this.minBeds!)
     }
@@ -154,7 +140,6 @@ export class LocationPropertiesComponent implements OnInit {
       filtered = filtered.filter((property) => property.beds <= this.maxBeds!)
     }
 
-    // Filtrar por baños
     if (this.minBaths !== null) {
       filtered = filtered.filter((property) => property.baths >= this.minBaths!)
     }
@@ -162,7 +147,6 @@ export class LocationPropertiesComponent implements OnInit {
       filtered = filtered.filter((property) => property.baths <= this.maxBaths!)
     }
 
-    // Filtrar por área
     if (this.minArea !== null) {
       filtered = filtered.filter((property) => property.area >= this.minArea!)
     }
@@ -170,7 +154,6 @@ export class LocationPropertiesComponent implements OnInit {
       filtered = filtered.filter((property) => property.area <= this.maxArea!)
     }
 
-    // Filtrar por precio
     if (this.minPrice !== null) {
       filtered = filtered.filter((property) => property.price >= this.minPrice!)
     }
@@ -181,12 +164,10 @@ export class LocationPropertiesComponent implements OnInit {
     return filtered
   }
 
-  // Formatear precio
   formatPrice(price: number): string {
     return "$" + price.toLocaleString()
   }
 
-  // Obtener conteo de propiedades por tipo
   getPropertyCount(type: "todos" | "venta" | "alquiler"): number {
     if (type === "todos") {
       return this.properties.length

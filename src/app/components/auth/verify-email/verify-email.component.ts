@@ -31,22 +31,6 @@ export class VerifyEmailComponent implements OnInit {
     const storedToken = localStorage.getItem('verificationToken')
     const storedEmail = localStorage.getItem('emailToVerify')
     
-    if (storedToken) {
-      this.verificationToken = storedToken
-      console.log("[v0] Token de verificación cargado desde localStorage")
-    } else {
-      // Fallback: intentar obtener de query params
-      this.route.queryParams.subscribe((params) => {
-        if (params["token"]) {
-          this.verificationToken = params["token"]
-          console.log("[v0] Token de verificación cargado desde URL")
-        } else {
-          console.log("[v0] No se encontró token de verificación")
-        }
-      })
-    }
-
-    // Guardar email si existe para función de reenvío
     if (storedEmail) {
       this.emailToVerify = storedEmail
     }

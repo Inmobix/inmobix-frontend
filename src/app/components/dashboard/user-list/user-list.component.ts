@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../../services/api.service';
 import { UserResponse } from '../../../models/user.model';
@@ -9,6 +9,7 @@ import { RouterLink } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './user-list.component.html',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class UserListComponent implements OnInit {
   users: UserResponse[] = [];
@@ -23,7 +24,6 @@ export class UserListComponent implements OnInit {
         this.loading = false;
       },
       error: (err) => {
-        console.error('Error al listar usuarios', err);
         this.loading = false;
       },
     });

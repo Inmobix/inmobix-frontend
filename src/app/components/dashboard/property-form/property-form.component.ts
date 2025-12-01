@@ -78,7 +78,6 @@ export class PropertyFormComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error loading property:', error);
         Swal.fire('Error', 'No se pudo cargar la propiedad', 'error');
         this.router.navigate(['/dashboard/properties']);
       }
@@ -95,7 +94,6 @@ export class PropertyFormComponent implements OnInit {
           this.router.navigate(['/dashboard/properties']);
         },
         error: (error) => {
-          console.error('Error updating property:', error);
           Swal.fire('Error', 'No se pudo actualizar la propiedad', 'error');
           this.loading = false;
         }
@@ -113,7 +111,6 @@ export class PropertyFormComponent implements OnInit {
           this.router.navigate(['/dashboard/properties']);
         },
         error: (error) => {
-          console.error('Error creating property:', error);
           const errorMessage = error.error?.message || error.message || "Error desconocido";
           Swal.fire('Error', `No se pudo crear la propiedad: ${errorMessage}`, 'error');
           this.loading = false;
