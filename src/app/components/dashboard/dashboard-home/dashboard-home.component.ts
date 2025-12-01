@@ -29,7 +29,6 @@ export class DashboardHomeComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error loading properties:', error);
         this.loading = false;
       }
     });

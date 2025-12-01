@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core"
 import { HttpClient, HttpHeaders } from "@angular/common/http"
 import type { Observable } from "rxjs"
-import { map, catchError } from "rxjs/operators"
+import { map, catchError, tap } from "rxjs/operators"
 import { throwError } from "rxjs"
 import { environment } from "../../environments/environment"
 import type {
@@ -26,18 +26,14 @@ export class ApiService {
   constructor(
     private http: HttpClient,
     private authService: AuthService,
-  ) {
-    console.log("[v0] ApiService inicializado con URL:", this.apiUrl)
-  }
+  ) {}
 
-  private getHeaders(): HttpHeaders {
+  /**
+   * Obtener headers para peticiones con autenticación
+   */
+  private getAuthHeaders(): HttpHeaders {
     const headers: any = {
       "Content-Type": "application/json",
-    }
-
-    const token = this.authService.getToken()
-    if (token) {
-      headers["Authorization"] = `Bearer ${token}`
     }
 
     const userId = this.authService.getUserId()
@@ -50,48 +46,69 @@ export class ApiService {
       headers["X-User-Role"] = userRole
     }
 
+    const token = this.authService.getToken()
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`
+    }
+
     return new HttpHeaders(headers)
   }
 
-  // Usuarios
+  /**
+   * Obtener headers básicos (sin autenticación)
+   */
+  private getBasicHeaders(): HttpHeaders {
+    return new HttpHeaders({
+      "Content-Type": "application/json",
+    })
+  }
 
-  // POST /api/register
+  // ==================== ENDPOINTS DE USUARIO ====================
+
+  /**
+   * POST /api/register - Registrar nuevo usuario
+   */
   registerUser(userData: UserRequest): Observable<UserResponse> {
     const url = `${this.apiUrl}/register`
-    console.log('[v0] Registrando usuario:', userData.email)
 
     return this.http
       .post<ApiResponse<UserResponse>>(url, userData, {
-        headers: this.getHeaders(),
+        headers: this.getBasicHeaders(),
       })
       .pipe(
         map((response) => {
-          console.log('[v0] Respuesta completa del registro:', response)
-          const verificationToken = (response.data as any)?.verificationToken || (response as any).verificationToken
-          console.log('[v0] Token de verificación encontrado:', verificationToken)
+          const verificationToken = response.data.verificationToken
+          
+          if (verificationToken) {
+            localStorage.setItem("verificationToken", verificationToken)
+            localStorage.setItem("emailToVerify", userData.email)
+          }
           
           return {
             ...response.data,
             message: response.message,
-            verificationToken: verificationToken,
           }
         }),
         catchError((error) => {
-          console.error('[v0] Error en registro:', error)
           return throwError(() => error)
         }),
       )
   }
 
-  // POST /api/login
+  /**
+   * POST /api/login - Iniciar sesión
+   */
   loginUser(credentials: LoginRequest): Observable<UserResponse> {
     const url = `${this.apiUrl}/login`
 
     return this.http
       .post<ApiResponse<UserResponse>>(url, credentials, {
-        headers: this.getHeaders(),
+        headers: this.getBasicHeaders(),
       })
       .pipe(
+        tap((response) => {
+          // AuthService ya guardará los datos
+        }),
         map((response) => {
           return {
             ...response.data,
@@ -104,17 +121,27 @@ export class ApiService {
       )
   }
 
-  // POST /api/forgot-password
+  /**
+   * POST /api/forgot-password - Solicitar recuperación de contraseña
+   */
   forgotPassword(request: ForgotPasswordRequest): Observable<ForgotPasswordResponse> {
     const url = `${this.apiUrl}/forgot-password`
 
     return this.http
       .post<ApiResponse<ForgotPasswordResponse>>(url, request, {
-        headers: this.getHeaders(),
+        headers: this.getBasicHeaders(),
       })
       .pipe(
         map((response) => {
-          return { ...response.data, message: response.message }
+          
+          if (response.data && response.data.resetPasswordToken) {
+            localStorage.setItem("resetPasswordToken", response.data.resetPasswordToken)
+          }
+          
+          return { 
+            ...response.data, 
+            message: response.message 
+          }
         }),
         catchError((error) => {
           return throwError(() => error)
@@ -122,16 +149,27 @@ export class ApiService {
       )
   }
 
+  /**
+   * POST /api/user/verify - Verificar email con token y código
+   */
   verifyEmail(request: VerifyWithTokenRequest): Observable<any> {
     const url = `${this.apiUrl}/user/verify`
 
     return this.http
       .post<ApiResponse<any>>(url, request, {
-        headers: this.getHeaders(),
+        headers: this.getBasicHeaders(),
       })
       .pipe(
+        tap(() => {
+          // Limpiar tokens de verificación
+          localStorage.removeItem("verificationToken")
+          localStorage.removeItem("emailToVerify")
+        }),
         map((response) => {
-          return { message: response.message, data: response.data }
+          return { 
+            message: response.message, 
+            data: response.data 
+          }
         }),
         catchError((error) => {
           return throwError(() => error)
@@ -139,16 +177,26 @@ export class ApiService {
       )
   }
 
+  /**
+   * POST /api/user/reset-password - Resetear contraseña con token y código
+   */
   resetPassword(request: ResetPasswordWithTokenRequest): Observable<any> {
     const url = `${this.apiUrl}/user/reset-password`
 
     return this.http
       .post<ApiResponse<any>>(url, request, {
-        headers: this.getHeaders(),
+        headers: this.getBasicHeaders(),
       })
       .pipe(
+        tap(() => {
+          // Limpiar token de reset
+          localStorage.removeItem("resetPasswordToken")
+        }),
         map((response) => {
-          return { message: response.message, data: response.data }
+          return { 
+            message: response.message, 
+            data: response.data 
+          }
         }),
         catchError((error) => {
           return throwError(() => error)
@@ -156,16 +204,27 @@ export class ApiService {
       )
   }
 
+  /**
+   * POST /api/user/resend-verification - Reenviar código de verificación
+   */
   resendVerificationEmail(request: ForgotPasswordRequest): Observable<UserResponse> {
     const url = `${this.apiUrl}/user/resend-verification`
 
     return this.http
       .post<ApiResponse<UserResponse>>(url, request, {
-        headers: this.getHeaders(),
+        headers: this.getBasicHeaders(),
       })
       .pipe(
         map((response) => {
-          return { ...response.data, message: response.message }
+          if (response.data.verificationToken) {
+            localStorage.setItem("verificationToken", response.data.verificationToken)
+            localStorage.setItem("emailToVerify", request.email)
+          }
+          
+          return { 
+            ...response.data, 
+            message: response.message 
+          }
         }),
         catchError((error) => {
           return throwError(() => error)
@@ -173,64 +232,53 @@ export class ApiService {
       )
   }
 
-  getUserById(id: number): Observable<UserResponse> {
-    const url = `${this.apiUrl}/user/${id}`
-
-    return this.http
-      .get<ApiResponse<UserResponse>>(url, {
-        headers: this.getHeaders(),
-      })
-      .pipe(
-        map((response) => {
-          return response.data
-        }),
-        catchError((error) => {
-          return throwError(() => error)
-        }),
-      )
-  }
-
+  /**
+   * GET /api/user/documento/{documento} - Buscar usuario por documento
+   * Requiere autenticación
+   */
   getByDocumento(documento: string): Observable<UserResponse> {
     const url = `${this.apiUrl}/user/documento/${documento}`
 
     return this.http
       .get<ApiResponse<UserResponse>>(url, {
-        headers: this.getHeaders(),
+        headers: this.getAuthHeaders(),
       })
       .pipe(
-        map((response) => {
-          return response.data
-        }),
+        map((response) => response.data),
         catchError((error) => {
           return throwError(() => error)
         }),
       )
   }
 
-  // GET /api/users - Solo ADMIN
+  /**
+   * GET /api/users - Listar todos los usuarios
+   * Solo ADMIN
+   */
   getAllUsers(): Observable<UserResponse[]> {
     const url = `${this.apiUrl}/users`
 
     return this.http
       .get<ApiResponse<UserResponse[]>>(url, {
-        headers: this.getHeaders(),
+        headers: this.getAuthHeaders(),
       })
       .pipe(
-        map((response) => {
-          return response.data
-        }),
+        map((response) => response.data),
         catchError((error) => {
           return throwError(() => error)
         }),
       )
   }
 
+  /**
+   * POST /api/user/request-edit/{id} - Solicitar token para editar cuenta
+   */
   requestEditToken(id: string): Observable<void> {
     const url = `${this.apiUrl}/user/request-edit/${id}`
 
     return this.http
       .post<ApiResponse<void>>(url, null, {
-        headers: this.getHeaders(),
+        headers: this.getAuthHeaders(),
       })
       .pipe(
         map((response) => {
@@ -242,29 +290,37 @@ export class ApiService {
       )
   }
 
+  /**
+   * PUT /api/user/confirm-edit?token={token} - Confirmar edición con token
+   */
   confirmUpdate(token: string, request: UserUpdateRequest): Observable<UserResponse> {
     const url = `${this.apiUrl}/user/confirm-edit?token=${token}`
 
     return this.http
       .put<ApiResponse<UserResponse>>(url, request, {
-        headers: this.getHeaders(),
+        headers: this.getAuthHeaders(),
       })
       .pipe(
-        map((response) => {
-          return response.data
+        tap((response) => {
+          // Actualizar datos del usuario en AuthService
+          this.authService.updateUserData(response.data)
         }),
+        map((response) => response.data),
         catchError((error) => {
           return throwError(() => error)
         }),
       )
   }
 
+  /**
+   * POST /api/user/request-delete/{id} - Solicitar token para eliminar cuenta
+   */
   requestDeleteToken(id: string): Observable<void> {
     const url = `${this.apiUrl}/user/request-delete/${id}`
 
     return this.http
       .post<ApiResponse<void>>(url, null, {
-        headers: this.getHeaders(),
+        headers: this.getAuthHeaders(),
       })
       .pipe(
         map((response) => {
@@ -276,17 +332,22 @@ export class ApiService {
       )
   }
 
+  /**
+   * DELETE /api/user/confirm-delete?token={token} - Confirmar eliminación con token
+   */
   confirmDelete(token: string): Observable<void> {
     const url = `${this.apiUrl}/user/confirm-delete?token=${token}`
 
     return this.http
       .delete<ApiResponse<void>>(url, {
-        headers: this.getHeaders(),
+        headers: this.getAuthHeaders(),
       })
       .pipe(
-        map((response) => {
-          return response.data
+        tap(() => {
+          // Cerrar sesión después de eliminar
+          this.authService.logout()
         }),
+        map((response) => response.data),
         catchError((error) => {
           return throwError(() => error)
         }),

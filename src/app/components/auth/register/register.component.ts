@@ -107,17 +107,12 @@ export class RegisterComponent {
     this.apiService.registerUser(userData).subscribe({
       next: (response) => {
         this.isLoading = false
-        console.log('[v0] Respuesta del registro:', response)
-        console.log('[v0] Token de verificación recibido:', response.verificationToken)
         
         const message = response.message || "Registro exitoso. Verifica tu email."
         const verificationToken = response.verificationToken
 
         if (verificationToken) {
           localStorage.setItem('verificationToken', verificationToken)
-          console.log('[v0] Token guardado en localStorage')
-        } else {
-          console.warn('[v0] No se recibió token de verificación')
         }
         
         localStorage.setItem('emailToVerify', this.email)

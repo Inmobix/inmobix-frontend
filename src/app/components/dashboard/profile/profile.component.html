@@ -1,23 +1,119 @@
-<div class="max-w-2xl mx-auto text-center py-12">
-  <div class="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
-    <iconify-icon icon="mdi:account" class="text-5xl text-blue-600"></iconify-icon>
+<div class="max-w-4xl mx-auto space-y-6">
+  <!-- Header -->
+  <div class="text-center">
+    <div class="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+      <iconify-icon icon="mdi:account" class="text-5xl text-blue-600"></iconify-icon>
+    </div>
+    <h2 class="text-3xl font-bold text-gray-900 mb-2">Mi Perfil</h2>
+    <p class="text-gray-500">Gestiona tu información personal y seguridad</p>
   </div>
-  <h2 class="text-2xl font-bold text-gray-900 mb-2">Mi Perfil</h2>
-  <p class="text-gray-500 mb-8">Gestiona tu información personal y seguridad.</p>
-  
-  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-left space-y-4">
-    <div class="flex justify-between py-3 border-b border-gray-50">
-      <span class="text-gray-500">Usuario</span>
-      <span class="font-medium text-gray-900">{{ user?.name || 'Usuario Actual' }}</span>
+
+  <!-- Información del Usuario -->
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="text-xl font-bold text-gray-900">Información Personal</h3>
+      <span [class]="user?.role === 'ADMIN' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'"
+            class="px-3 py-1 rounded-full text-sm font-medium">
+        {{ user?.role === 'ADMIN' ? 'ADMIN' : 'USUARIO' }}
+      </span>
     </div>
-    <div class="flex justify-between py-3 border-b border-gray-50">
-      <span class="text-gray-500">Email</span>
-      <span class="font-medium text-gray-900">{{ user?.email || 'usuario&#64;ejemplo.com' }}</span>
+
+    <div *ngIf="!isEditing" class="space-y-4">
+      <!-- Vista de solo lectura -->
+      <div class="flex justify-between py-3 border-b border-gray-50">
+        <span class="text-gray-500 font-medium">Nombre completo</span>
+        <span class="text-gray-900">{{ user?.name }}</span>
+      </div>
+      <div class="flex justify-between py-3 border-b border-gray-50">
+        <span class="text-gray-500 font-medium">Usuario</span>
+        <span class="text-gray-900">{{ user?.username }}</span>
+      </div>
+      <div class="flex justify-between py-3 border-b border-gray-50">
+        <span class="text-gray-500 font-medium">Email</span>
+        <span class="text-gray-900">{{ user?.email }}</span>
+      </div>
+      <div class="flex justify-between py-3 border-b border-gray-50">
+        <span class="text-gray-500 font-medium">Documento</span>
+        <span class="text-gray-900">{{ user?.documento || 'No registrado' }}</span>
+      </div>
+      <div class="flex justify-between py-3 border-b border-gray-50">
+        <span class="text-gray-500 font-medium">Teléfono</span>
+        <span class="text-gray-900">{{ user?.phone || 'No registrado' }}</span>
+      </div>
+      <div class="flex justify-between py-3 border-b border-gray-50">
+        <span class="text-gray-500 font-medium">Fecha de nacimiento</span>
+        <span class="text-gray-900">{{ user?.birthDate || 'No registrado' }}</span>
+      </div>
+
+      <!-- Botones de acción -->
+      <div class="flex gap-4 pt-6">
+        <button (click)="enableEdit()" [disabled]="isLoading"
+                class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-50 cursor-pointer">
+          <iconify-icon icon="mdi:pencil" class="mr-2"></iconify-icon>
+          Editar Información
+        </button>
+        <button (click)="requestDelete()" [disabled]="isLoading"
+                class="flex-1 border border-red-200 text-red-600 font-semibold py-3 rounded-xl hover:bg-red-50 transition-colors disabled:opacity-50 cursor-pointer">
+          <iconify-icon icon="mdi:delete" class="mr-2"></iconify-icon>
+          Eliminar Cuenta
+        </button>
+      </div>
     </div>
-    <div class="pt-4">
-       <button class="w-full border border-gray-200 text-gray-600 font-semibold py-3 rounded-xl hover:bg-gray-50 transition-colors">
-         Editar Información
-       </button>
-    </div>
+
+    <!-- Formulario de edición -->
+    <form *ngIf="isEditing" (ngSubmit)="requestEdit()" class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Nombre completo</label>
+        <input type="text" [(ngModel)]="editForm.name" name="name" required
+               class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all outline-none">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Usuario</label>
+        <input type="text" [(ngModel)]="editForm.username" name="username" required
+               class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all outline-none">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+        <input type="email" [(ngModel)]="editForm.email" name="email" required
+               class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all outline-none">
+        <p class="text-xs text-gray-500 mt-1">Si cambias el email, deberás verificarlo nuevamente</p>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Documento</label>
+        <input type="text" [(ngModel)]="editForm.documento" name="documento"
+               class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all outline-none">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Teléfono</label>
+        <input type="tel" [(ngModel)]="editForm.phone" name="phone"
+               class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all outline-none">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Fecha de nacimiento</label>
+        <input type="date" [(ngModel)]="editForm.birthDate" name="birthDate"
+               class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all outline-none">
+      </div>
+
+      <div class="flex gap-4 pt-6">
+        <button type="button" (click)="cancelEdit()" [disabled]="isLoading"
+                class="flex-1 border border-gray-200 text-gray-700 font-semibold py-3 rounded-xl hover:bg-gray-50 transition-colors disabled:opacity-50 cursor-pointer">
+          Cancelar
+        </button>
+        <button type="submit" [disabled]="isLoading || !hasChanges"
+                class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center">
+          <span *ngIf="!isLoading && hasChanges">Guardar Cambios</span>
+          <span *ngIf="!isLoading && !hasChanges">Sin Cambios</span>
+          <span *ngIf="isLoading" class="flex items-center">
+            <iconify-icon icon="svg-spinners:180-ring" width="24" height="24" class="mr-2"></iconify-icon>
+            Guardando...
+          </span>
+        </button>
+      </div>
+    </form>
   </div>
 </div>

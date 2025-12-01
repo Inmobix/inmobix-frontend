@@ -1,0 +1,79 @@
+<div class="max-w-6xl mx-auto space-y-6">
+  <!-- Header -->
+  <div class="text-center">
+    <div class="w-24 h-24 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
+      <iconify-icon icon="mdi:shield-account" class="text-5xl text-purple-600"></iconify-icon>
+    </div>
+    <h2 class="text-3xl font-bold text-gray-900 mb-2">Panel de Administración</h2>
+    <p class="text-gray-500">Gestiona usuarios y configuraciones del sistema</p>
+  </div>
+
+  <!-- Buscar por documento -->
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+    <div class="flex items-center gap-3 mb-6">
+      <iconify-icon icon="mdi:magnify" class="text-2xl text-blue-600"></iconify-icon>
+      <h3 class="text-xl font-bold text-gray-900">Buscar Usuario por Documento</h3>
+      <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-medium">
+        ADMIN
+      </span>
+    </div>
+
+    <div class="space-y-4">
+      <div class="flex gap-4">
+        <input type="text" [(ngModel)]="searchDocumento" placeholder="Ingresa el documento"
+               class="flex-1 px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all outline-none">
+        <button (click)="searchByDocumento()" [disabled]="isSearching"
+                class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-colors disabled:opacity-50 flex items-center">
+          <iconify-icon *ngIf="!isSearching" icon="mdi:magnify" class="mr-2"></iconify-icon>
+          <iconify-icon *ngIf="isSearching" icon="svg-spinners:180-ring" class="mr-2"></iconify-icon>
+          {{ isSearching ? 'Buscando...' : 'Buscar' }}
+        </button>
+        <button *ngIf="searchDocumento" (click)="clearSearch()"
+                class="px-4 py-3 border border-gray-200 text-gray-600 rounded-xl hover:bg-gray-50 transition-colors">
+          <iconify-icon icon="mdi:close"></iconify-icon>
+        </button>
+      </div>
+
+      <p class="text-sm text-gray-500">
+        <iconify-icon icon="mdi:information" class="mr-1"></iconify-icon>
+        Como ADMIN puedes buscar cualquier usuario del sistema
+      </p>
+    </div>
+  </div>
+
+  <!-- Panel de opciones de administración -->
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+    <div class="flex items-center gap-3 mb-6">
+      <iconify-icon icon="mdi:cog" class="text-2xl text-purple-600"></iconify-icon>
+      <h3 class="text-xl font-bold text-gray-900">Opciones de Administración</h3>
+      <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-medium">
+        SOLO ADMIN
+      </span>
+    </div>
+
+    <p class="text-gray-600 mb-4">Como administrador, tienes acceso a funciones especiales:</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <a routerLink="/dashboard/users" 
+         class="p-4 border-2 border-purple-200 rounded-xl hover:bg-purple-50 transition-colors cursor-pointer group">
+        <div class="flex items-center gap-3">
+          <iconify-icon icon="mdi:account-multiple" class="text-2xl text-purple-600 group-hover:scale-110 transition-transform"></iconify-icon>
+          <div>
+            <h4 class="font-semibold text-gray-900">Ver todos los usuarios</h4>
+            <p class="text-sm text-gray-500">Accede a la lista completa</p>
+          </div>
+        </div>
+      </a>
+
+      <div class="p-4 border-2 border-gray-200 rounded-xl bg-gray-50">
+        <div class="flex items-center gap-3">
+          <iconify-icon icon="mdi:shield-check" class="text-2xl text-gray-400"></iconify-icon>
+          <div>
+            <h4 class="font-semibold text-gray-700">Más funciones próximamente</h4>
+            <p class="text-sm text-gray-500">En desarrollo</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
