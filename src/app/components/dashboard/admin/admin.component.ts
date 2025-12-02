@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { ApiService } from '../../../services/api.service';
+import { FileDownloadService } from '../../../services/file-download.service';
 import { UserResponse } from '../../../models/user.model';
 import Swal from 'sweetalert2';
 
@@ -15,35 +16,29 @@ import Swal from 'sweetalert2';
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AdminComponent implements OnInit {
-  // Para búsqueda por documento
   searchDocumento = '';
   searchedUser: UserResponse | null = null;
   isSearching = false;
+  isDownloading = false;
 
   constructor(
     private authService: AuthService,
     private apiService: ApiService,
+    private fileDownloadService: FileDownloadService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    // Verificar que el usuario sea admin
     if (!this.isAdmin()) {
       Swal.fire('Acceso Denegado', 'No tienes permisos para acceder a esta sección', 'error');
       this.router.navigate(['/dashboard/home']);
     }
   }
 
-  /**
-   * Verificar si el usuario es ADMIN
-   */
   isAdmin(): boolean {
     return this.authService.isAdmin();
   }
 
-  /**
-   * Buscar usuario por documento
-   */
   searchByDocumento(): void {
     if (!this.searchDocumento.trim()) {
       Swal.fire('Advertencia', 'Ingresa un documento', 'warning');
@@ -82,11 +77,66 @@ export class AdminComponent implements OnInit {
     });
   }
 
-  /**
-   * Limpiar búsqueda
-   */
   clearSearch(): void {
     this.searchDocumento = '';
     this.searchedUser = null;
+  }
+
+  /**
+   * Descargar reporte PDF de todos los usuarios
+   */
+  downloadAllUsersPdf(): void {
+    this.isDownloading = true;
+
+    this.apiService.downloadAllUsersPdfReport().subscribe({
+      next: (blob) => {
+        const fileName = this.fileDownloadService.generateFileName('reporte_usuarios', 'pdf');
+        this.fileDownloadService.downloadFile(blob, fileName);
+        this.isDownloading = false;
+        
+        Swal.fire({
+          icon: 'success',
+          title: 'Descarga exitosa',
+          text: 'El reporte PDF se ha descargado correctamente',
+          timer: 2000,
+          timerProgressBar: true,
+          showConfirmButton: false
+        });
+      },
+      error: (error) => {
+        this.isDownloading = false;
+        const errorMsg = error.error?.message || 'Error al descargar el reporte PDF';
+        Swal.fire('Error', errorMsg, 'error');
+      }
+    });
+  }
+
+  /**
+   * Descargar reporte Excel de todos los usuarios
+   */
+  downloadAllUsersExcel(): void {
+    this.isDownloading = true;
+
+    this.apiService.downloadAllUsersExcelReport().subscribe({
+      next: (blob) => {
+        const fileName = this.fileDownloadService.generateFileName('reporte_usuarios', 'xlsx');
+        this.fileDownloadService.downloadFile(blob, fileName);
+        this.isDownloading = false;
+        
+        Swal.fire({
+          icon: 'success',
+          title: 'Descarga exitosa',
+          text: 'El reporte Excel se ha descargado correctamente',
+          timer: 2000,
+          timerProgressBar: true,
+          showConfirmButton: false
+        });
+      },
+      error: (error) => {
+        this.isDownloading = false;
+        const errorMsg = error.error?.message || 'Error al descargar el reporte Excel';
+        Swal.fire('Error', errorMsg, 'error');
+      }
+    });
   }
 }
