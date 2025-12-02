@@ -8,6 +8,43 @@
     <p class="text-gray-500">Gestiona tu información personal y seguridad</p>
   </div>
 
+<!-- Reportes -->
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+    <div class="flex items-center gap-3 mb-6">
+      <iconify-icon icon="mdi:file-chart" class="text-2xl text-indigo-600"></iconify-icon>
+      <h3 class="text-xl font-bold text-gray-900">Mis Reportes</h3>
+    </div>
+
+    <p class="text-gray-600 mb-6">
+      Descarga un reporte completo con tu información personal y tus propiedades registradas
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <button (click)="downloadMyPdfReport()" [disabled]="isDownloadingReport"
+              class="flex items-center justify-center gap-3 px-6 py-4 bg-red-50 border-2 border-red-200 rounded-xl hover:bg-red-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
+        <iconify-icon icon="mdi:file-pdf-box" class="text-3xl text-red-600"></iconify-icon>
+        <div class="text-left">
+          <h4 class="font-semibold text-gray-900">Descargar PDF</h4>
+          <p class="text-sm text-gray-600">Reporte en formato PDF</p>
+        </div>
+      </button>
+
+      <button (click)="downloadMyExcelReport()" [disabled]="isDownloadingReport"
+              class="flex items-center justify-center gap-3 px-6 py-4 bg-green-50 border-2 border-green-200 rounded-xl hover:bg-green-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
+        <iconify-icon icon="mdi:file-excel-box" class="text-3xl text-green-600"></iconify-icon>
+        <div class="text-left">
+          <h4 class="font-semibold text-gray-900">Descargar Excel</h4>
+          <p class="text-sm text-gray-600">Reporte en formato Excel</p>
+        </div>
+      </button>
+    </div>
+
+    <div *ngIf="isDownloadingReport" class="mt-4 flex items-center justify-center gap-2 text-gray-600">
+      <iconify-icon icon="svg-spinners:180-ring" width="20" height="20"></iconify-icon>
+      <span class="text-sm">Generando reporte...</span>
+    </div>
+  </div>
+
   <!-- Información del Usuario -->
   <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
     <div class="flex justify-between items-center mb-6">
