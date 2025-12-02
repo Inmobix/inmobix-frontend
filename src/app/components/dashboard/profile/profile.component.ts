@@ -6,6 +6,7 @@ import { AuthService } from '../../../services/auth.service';
 import { ApiService } from '../../../services/api.service';
 import { UserResponse, UserUpdateRequest } from '../../../models/user.model';
 import Swal from 'sweetalert2';
+import { FileDownloadService } from '../../../services/file-download.service';
 
 @Component({
   selector: 'app-profile',
@@ -18,6 +19,7 @@ export class ProfileComponent implements OnInit {
   user: UserResponse | null = null;
   isEditing = false;
   isLoading = false;
+  isDownloadingReport = false;
 
   // Formulario de edición
   editForm: UserUpdateRequest = {
@@ -42,7 +44,8 @@ export class ProfileComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private apiService: ApiService,
-    private router: Router
+    private router: Router,
+    private fileDownloadService: FileDownloadService
   ) {}
 
   ngOnInit(): void {
@@ -254,6 +257,74 @@ export class ProfileComponent implements OnInit {
       error: (error) => {
         this.isLoading = false;
         const errorMsg = error.error?.message || 'Error al confirmar eliminación';
+        Swal.fire('Error', errorMsg, 'error');
+      }
+    });
+  }
+
+  /**
+   * Descargar reporte PDF del usuario actual
+   */
+  downloadMyPdfReport(): void {
+    if (!this.user?.id) return;
+
+    this.isDownloadingReport = true;
+
+    this.apiService.downloadUserPdfReport(this.user.id).subscribe({
+      next: (blob) => {
+        const fileName = this.fileDownloadService.generateFileName(
+          `reporte_${this.user!.username}`,
+          'pdf'
+        );
+        this.fileDownloadService.downloadFile(blob, fileName);
+        this.isDownloadingReport = false;
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Descarga exitosa',
+          text: 'Tu reporte PDF se ha descargado correctamente',
+          timer: 2000,
+          timerProgressBar: true,
+          showConfirmButton: false
+        });
+      },
+      error: (error) => {
+        this.isDownloadingReport = false;
+        const errorMsg = error.error?.message || 'Error al descargar el reporte PDF';
+        Swal.fire('Error', errorMsg, 'error');
+      }
+    });
+  }
+
+  /**
+   * Descargar reporte Excel del usuario actual
+   */
+  downloadMyExcelReport(): void {
+    if (!this.user?.id) return;
+
+    this.isDownloadingReport = true;
+
+    this.apiService.downloadUserExcelReport(this.user.id).subscribe({
+      next: (blob) => {
+        const fileName = this.fileDownloadService.generateFileName(
+          `reporte_${this.user!.username}`,
+          'xlsx'
+        );
+        this.fileDownloadService.downloadFile(blob, fileName);
+        this.isDownloadingReport = false;
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Descarga exitosa',
+          text: 'Tu reporte Excel se ha descargado correctamente',
+          timer: 2000,
+          timerProgressBar: true,
+          showConfirmButton: false
+        });
+      },
+      error: (error) => {
+        this.isDownloadingReport = false;
+        const errorMsg = error.error?.message || 'Error al descargar el reporte Excel';
         Swal.fire('Error', errorMsg, 'error');
       }
     });

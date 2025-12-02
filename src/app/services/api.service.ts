@@ -353,4 +353,78 @@ export class ApiService {
         }),
       )
   }
+
+  // ==================== ENDPOINTS DE REPORTES ====================
+
+  /**
+   * GET /api/users/report/pdf - Descargar reporte PDF de todos los usuarios
+   * Solo ADMIN
+   */
+  downloadAllUsersPdfReport(): Observable<Blob> {
+    const url = `${this.apiUrl}/users/report/pdf`;
+
+    return this.http.get(url, {
+      headers: this.getAuthHeaders(),
+      responseType: 'blob'
+    }).pipe(
+      catchError((error) => {
+        console.error('Error al descargar reporte PDF:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  /**
+   * GET /api/users/report/excel - Descargar reporte Excel de todos los usuarios
+   * Solo ADMIN
+   */
+  downloadAllUsersExcelReport(): Observable<Blob> {
+    const url = `${this.apiUrl}/users/report/excel`;
+
+    return this.http.get(url, {
+      headers: this.getAuthHeaders(),
+      responseType: 'blob'
+    }).pipe(
+      catchError((error) => {
+        console.error('Error al descargar reporte Excel:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  /**
+   * GET /api/user/{userId}/report/pdf - Descargar reporte PDF de un usuario específico
+   * Owner o ADMIN
+   */
+  downloadUserPdfReport(userId: string): Observable<Blob> {
+    const url = `${this.apiUrl}/user/${userId}/report/pdf`;
+
+    return this.http.get(url, {
+      headers: this.getAuthHeaders(),
+      responseType: 'blob'
+    }).pipe(
+      catchError((error) => {
+        console.error('Error al descargar reporte PDF del usuario:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  /**
+   * GET /api/user/{userId}/report/excel - Descargar reporte Excel de un usuario específico
+   * Owner o ADMIN
+   */
+  downloadUserExcelReport(userId: string): Observable<Blob> {
+    const url = `${this.apiUrl}/user/${userId}/report/excel`;
+
+    return this.http.get(url, {
+      headers: this.getAuthHeaders(),
+      responseType: 'blob'
+    }).pipe(
+      catchError((error) => {
+        console.error('Error al descargar reporte Excel del usuario:', error);
+        return throwError(() => error);
+      })
+    );
+  }
 }

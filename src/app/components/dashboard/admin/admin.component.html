@@ -65,6 +65,28 @@
         </div>
       </a>
 
+      <button (click)="downloadAllUsersPdf()" [disabled]="isDownloading"
+              class="p-4 border-2 border-blue-200 rounded-xl hover:bg-blue-50 transition-colors cursor-pointer group disabled:opacity-50 text-left">
+        <div class="flex items-center gap-3">
+          <iconify-icon icon="mdi:file-pdf-box" class="text-2xl text-blue-600 group-hover:scale-110 transition-transform"></iconify-icon>
+          <div>
+            <h4 class="font-semibold text-gray-900">Reporte PDF Usuarios</h4>
+            <p class="text-sm text-gray-500">Descargar listado completo</p>
+          </div>
+        </div>
+      </button>
+
+      <button (click)="downloadAllUsersExcel()" [disabled]="isDownloading"
+              class="p-4 border-2 border-green-200 rounded-xl hover:bg-green-50 transition-colors cursor-pointer group disabled:opacity-50 text-left">
+        <div class="flex items-center gap-3">
+          <iconify-icon icon="mdi:file-excel-box" class="text-2xl text-green-600 group-hover:scale-110 transition-transform"></iconify-icon>
+          <div>
+            <h4 class="font-semibold text-gray-900">Reporte Excel Usuarios</h4>
+            <p class="text-sm text-gray-500">Descargar listado completo</p>
+          </div>
+        </div>
+      </button>
+
       <div class="p-4 border-2 border-gray-200 rounded-xl bg-gray-50">
         <div class="flex items-center gap-3">
           <iconify-icon icon="mdi:shield-check" class="text-2xl text-gray-400"></iconify-icon>
