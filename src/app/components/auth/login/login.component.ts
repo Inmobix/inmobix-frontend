@@ -21,6 +21,11 @@ export class LoginComponent {
   passwordError = ""
   isLoading = false
   errorMessage = ""
+  showPassword = false
+
+  togglePasswordVisibility(show: boolean) {
+    this.showPassword = show
+  }
 
   private emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -44,7 +49,13 @@ export class LoginComponent {
     if (!this.password) {
       this.passwordError = "La contraseña es obligatoria."
     } else {
-      this.passwordError = ""
+      // Minimo 8 caracteres, una mayuscula, una minuscula, un numero y un caracter especial
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+      if (!passwordRegex.test(this.password)) {
+        this.passwordError = "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un símbolo especial."
+      } else {
+        this.passwordError = ""
+      }
     }
   }
 

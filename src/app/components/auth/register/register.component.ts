@@ -33,6 +33,21 @@ export class RegisterComponent {
   isLoading = false
   errorMessage = ""
   successMessage = ""
+  showPassword = false
+  showConfirmPassword = false
+  showPasswordInfoModal = false
+
+  togglePasswordVisibility(show: boolean) {
+    this.showPassword = show
+  }
+
+  toggleConfirmPasswordVisibility(show: boolean) {
+    this.showConfirmPassword = show
+  }
+
+  togglePasswordInfoModal() {
+    this.showPasswordInfoModal = !this.showPasswordInfoModal
+  }
 
   constructor(
     private apiService: ApiService,
@@ -53,7 +68,8 @@ export class RegisterComponent {
   }
 
   validatePassword() {
-    this.passwordError = !this.password
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+    this.passwordError = !this.password || !passwordRegex.test(this.password)
     this.validateConfirmPassword()
   }
 
