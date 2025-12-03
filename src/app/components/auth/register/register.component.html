@@ -1,207 +1,446 @@
-<section
-  class="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-8"
->
-  <div class="max-w-md w-full bg-white rounded-xl shadow-lg p-10 m-4">
-    <h2 class="text-3xl font-bold text-gray-900 text-center mb-6">
-      Crear Cuenta
-    </h2>
-
-    <form class="space-y-4" (ngSubmit)="onSubmit()">
-      <!-- Nombre -->
-      <div>
-        <label for="name" class="block text-gray-700 font-medium mb-2"
-          >Nombre completo</label
-        >
-        <input
-          type="text"
-          id="name"
-          [(ngModel)]="name"
-          name="name"
-          (blur)="validateName()"
-          placeholder="Tu nombre"
-          [disabled]="isLoading"
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none placeholder-gray-400 disabled:bg-gray-100"
-          [class.border-red-500]="nameError"
-        />
-        <p *ngIf="nameError" class="text-red-500 text-sm mt-1">
-          El nombre es obligatorio
+<section class="min-h-screen flex bg-gray-50 items-start">
+  <!-- Left Side - Image -->
+  <div class="hidden md:block md:w-1/2 sticky top-0 h-screen">
+    <img
+      src="assets/images/house.jpeg"
+      alt="Register Background"
+      class="absolute inset-0 w-full h-full object-cover"
+    />
+    <div
+      class="absolute inset-0 bg-gradient-to-r from-indigo-900/90 to-indigo-800/70 flex items-center justify-center p-12"
+    >
+      <div class="text-white max-w-lg">
+        <h2 class="text-4xl font-bold mb-6">Únete a Inmobix</h2>
+        <p class="text-lg text-indigo-100">
+          Crea tu cuenta y comienza a explorar las mejores propiedades del
+          mercado. Es rápido, fácil y seguro.
         </p>
       </div>
+    </div>
+  </div>
 
-      <!-- Username -->
-      <div>
-        <label for="username" class="block text-gray-700 font-medium mb-2"
-          >Nombre de usuario</label
+  <!-- Right Side - Form -->
+  <div class="w-full md:w-1/2 flex items-center justify-center p-8 min-h-screen">
+    <div class="max-w-md w-full bg-white rounded-2xl shadow-xl p-10">
+        <div class="text-center mb-8">
+          <h2 class="text-3xl font-bold text-gray-900 mb-2">Crear Cuenta</h2>
+          <p class="text-gray-500">Completa tus datos para registrarte</p>
+        </div>
+
+        <form class="space-y-5" (ngSubmit)="onSubmit()">
+          <!-- Nombre -->
+          <div>
+            <label for="name" class="block text-sm font-medium text-gray-700 mb-1"
+              >Nombre completo <span class="text-red-500">*</span></label
+            >
+            <input
+              type="text"
+              id="name"
+              [(ngModel)]="name"
+              name="name"
+              (blur)="validateName()"
+              placeholder="Tu nombre completo"
+              [disabled]="isLoading"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors disabled:bg-gray-100 placeholder-gray-400"
+              [class.border-red-500]="nameError"
+            />
+            <p *ngIf="nameError" class="mt-1 text-sm text-red-500">
+              El nombre es obligatorio
+            </p>
+          </div>
+
+          <!-- Username -->
+          <div>
+            <label for="username" class="block text-sm font-medium text-gray-700 mb-1"
+              >Nombre de usuario <span class="text-red-500">*</span></label
+            >
+            <input
+              type="text"
+              id="username"
+              [(ngModel)]="username"
+              name="username"
+              (blur)="validateUsername()"
+              placeholder="Tu usuario"
+              [disabled]="isLoading"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors disabled:bg-gray-100 placeholder-gray-400"
+              [class.border-red-500]="usernameError"
+            />
+            <p *ngIf="usernameError" class="mt-1 text-sm text-red-500">
+              El usuario es obligatorio
+            </p>
+          </div>
+
+          <!-- Email -->
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700 mb-1"
+              >Correo electrónico <span class="text-red-500">*</span></label
+            >
+            <input
+              type="email"
+              id="email"
+              [(ngModel)]="email"
+              name="email"
+              (blur)="validateEmail()"
+              placeholder="ejemplo@correo.com"
+              [disabled]="isLoading"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors disabled:bg-gray-100 placeholder-gray-400"
+              [class.border-red-500]="emailError"
+            />
+            <p *ngIf="emailError" class="mt-1 text-sm text-red-500">
+              Correo inválido u obligatorio
+            </p>
+          </div>
+
+          <!-- Documento -->
+          <div>
+            <label for="documento" class="block text-sm font-medium text-gray-700 mb-1"
+              >Documento de identidad <span class="text-red-500">*</span></label
+            >
+            <input
+              type="text"
+              id="documento"
+              [(ngModel)]="documento"
+              name="documento"
+              (blur)="validateDocumento()"
+              placeholder="Número de documento"
+              [disabled]="isLoading"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors disabled:bg-gray-100 placeholder-gray-400"
+              [class.border-red-500]="documentoError"
+            />
+            <p *ngIf="documentoError" class="mt-1 text-sm text-red-500">
+              El documento es obligatorio
+            </p>
+          </div>
+
+          <!-- Contraseña -->
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <label for="password" class="block text-sm font-medium text-gray-700"
+                >Contraseña <span class="text-red-500">*</span></label
+              >
+              <button
+                type="button"
+                (click)="togglePasswordInfoModal()"
+                class="text-indigo-600 hover:text-indigo-800 text-xs font-medium flex items-center gap-1 focus:outline-none"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                Requisitos
+              </button>
+            </div>
+            <div class="relative">
+              <input
+                [type]="showPassword ? 'text' : 'password'"
+                id="password"
+                [(ngModel)]="password"
+                name="password"
+                (blur)="validatePassword()"
+                placeholder="••••••••"
+                [disabled]="isLoading"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors disabled:bg-gray-100 placeholder-gray-400 pr-10"
+                [class.border-red-500]="passwordError"
+              />
+              <button
+                type="button"
+                class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none cursor-pointer"
+                (mousedown)="togglePasswordVisibility(true)"
+                (mouseup)="togglePasswordVisibility(false)"
+                (mouseleave)="togglePasswordVisibility(false)"
+                (touchstart)="togglePasswordVisibility(true)"
+                (touchend)="togglePasswordVisibility(false)"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                  />
+                </svg>
+              </button>
+            </div>
+            <p *ngIf="passwordError" class="mt-1 text-xs text-red-500">
+              Mínimo 8 caracteres, mayúscula, minúscula, número y símbolo especial.
+            </p>
+          </div>
+
+          <!-- Confirmar Contraseña -->
+          <div>
+            <label
+              for="confirmPassword"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Confirmar Contraseña <span class="text-red-500">*</span></label
+            >
+            <div class="relative">
+              <input
+                [type]="showConfirmPassword ? 'text' : 'password'"
+                id="confirmPassword"
+                [(ngModel)]="confirmPassword"
+                name="confirmPassword"
+                (blur)="validateConfirmPassword()"
+                placeholder="Repite tu contraseña"
+                [disabled]="isLoading"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors disabled:bg-gray-100 placeholder-gray-400 pr-10"
+                [class.border-red-500]="
+                  confirmPasswordError || confirmPasswordMismatch
+                "
+              />
+              <button
+                type="button"
+                class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none cursor-pointer"
+                (mousedown)="toggleConfirmPasswordVisibility(true)"
+                (mouseup)="toggleConfirmPasswordVisibility(false)"
+                (mouseleave)="toggleConfirmPasswordVisibility(false)"
+                (touchstart)="toggleConfirmPasswordVisibility(true)"
+                (touchend)="toggleConfirmPasswordVisibility(false)"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                  />
+                </svg>
+              </button>
+            </div>
+            <p *ngIf="confirmPasswordError" class="mt-1 text-sm text-red-500">
+              Confirma tu contraseña
+            </p>
+            <p *ngIf="confirmPasswordMismatch" class="mt-1 text-sm text-red-500">
+              Las contraseñas no coinciden
+            </p>
+          </div>
+
+          <!-- Opcionales: teléfono y fecha de nacimiento -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label for="telefono" class="block text-sm font-medium text-gray-700 mb-1"
+                >Teléfono (opcional)</label
+              >
+              <input
+                type="tel"
+                id="telefono"
+                [(ngModel)]="telefono"
+                name="telefono"
+                placeholder="+57 300..."
+                [disabled]="isLoading"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors disabled:bg-gray-100"
+              />
+            </div>
+            <div>
+              <label
+                for="fechaNacimiento"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >Fecha de nacimiento</label
+              >
+              <input
+                type="date"
+                id="fechaNacimiento"
+                [(ngModel)]="fechaNacimiento"
+                name="fechaNacimiento"
+                [disabled]="isLoading"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors disabled:bg-gray-100"
+              />
+            </div>
+          </div>
+
+          <!-- Registrarse -->
+          <button
+            type="submit"
+            [disabled]="isLoading"
+            class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:-translate-y-0.5 mt-6"
+          >
+            <span *ngIf="!isLoading">Crear Cuenta</span>
+            <span *ngIf="isLoading" class="flex items-center">
+              <svg
+                class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              Registrando...
+            </span>
+          </button>
+
+          <!-- Login Link -->
+          <p class="text-center text-sm text-gray-600 mt-4">
+            ¿Ya tienes una cuenta?
+            <a
+              [routerLink]="['/login']"
+              class="font-medium text-indigo-600 hover:text-indigo-500"
+            >
+              Inicia sesión
+            </a>
+          </p>
+          
+          <!-- Home Link -->
+          <p class="text-center mt-2">
+              <a [routerLink]="['/']" class="text-sm text-gray-500 hover:text-gray-700 flex items-center justify-center gap-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                  </svg>
+                  Volver al inicio
+              </a>
+          </p>
+        </form>
+    </div>
+  </div>
+
+  <!-- Modal de Requisitos de Contraseña -->
+  <div
+    *ngIf="showPasswordInfoModal"
+    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+  >
+    <div class="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 animate-fade-in-up">
+      <div class="flex justify-between items-start mb-4">
+        <h3 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 text-indigo-600"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+            />
+          </svg>
+          Requisitos de Contraseña
+        </h3>
+        <button
+          (click)="togglePasswordInfoModal()"
+          class="text-gray-400 hover:text-gray-600 focus:outline-none"
         >
-        <input
-          type="text"
-          id="username"
-          [(ngModel)]="username"
-          name="username"
-          (blur)="validateUsername()"
-          placeholder="Tu usuario"
-          [disabled]="isLoading"
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none placeholder-gray-400 disabled:bg-gray-100"
-          [class.border-red-500]="usernameError"
-        />
-        <p *ngIf="usernameError" class="text-red-500 text-sm mt-1">
-          El usuario es obligatorio
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <div class="space-y-4">
+        <p class="text-gray-600 text-sm">
+          Para garantizar la seguridad de tu cuenta, tu contraseña debe cumplir
+          con los siguientes criterios:
         </p>
+
+        <ul class="space-y-2 text-sm text-gray-700">
+          <li class="flex items-center gap-2">
+            <span class="w-1.5 h-1.5 bg-indigo-500 rounded-full"></span>
+            Mínimo <strong>8 caracteres</strong>
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="w-1.5 h-1.5 bg-indigo-500 rounded-full"></span>
+            Al menos una <strong>letra mayúscula (A-Z)</strong>
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="w-1.5 h-1.5 bg-indigo-500 rounded-full"></span>
+            Al menos una <strong>letra minúscula (a-z)</strong>
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="w-1.5 h-1.5 bg-indigo-500 rounded-full"></span>
+            Al menos un <strong>número (0-9)</strong>
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="w-1.5 h-1.5 bg-indigo-500 rounded-full"></span>
+            Al menos un <strong>símbolo especial</strong>
+          </li>
+        </ul>
+
+        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+          <p class="text-xs font-semibold text-gray-500 uppercase mb-2">
+            Símbolos permitidos:
+          </p>
+          <div class="flex flex-wrap gap-2 font-mono text-indigo-600 font-bold">
+            <span class="bg-white px-2 py-1 rounded border border-gray-200">&#64;</span>
+            <span class="bg-white px-2 py-1 rounded border border-gray-200">$</span>
+            <span class="bg-white px-2 py-1 rounded border border-gray-200">!</span>
+            <span class="bg-white px-2 py-1 rounded border border-gray-200">%</span>
+            <span class="bg-white px-2 py-1 rounded border border-gray-200">*</span>
+            <span class="bg-white px-2 py-1 rounded border border-gray-200">?</span>
+            <span class="bg-white px-2 py-1 rounded border border-gray-200">&</span>
+          </div>
+        </div>
+
+        <div class="bg-indigo-50 p-3 rounded-lg border border-indigo-100">
+          <p class="text-xs text-indigo-800">
+            <strong>Ejemplo válido:</strong> P&#64;ssw0rd123
+          </p>
+        </div>
       </div>
 
-      <!-- Email -->
-      <div>
-        <label for="email" class="block text-gray-700 font-medium mb-2"
-          >Correo electrónico</label
+      <div class="mt-6">
+        <button
+          (click)="togglePasswordInfoModal()"
+          class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg font-medium transition-colors"
         >
-        <input
-          type="email"
-          id="email"
-          [(ngModel)]="email"
-          name="email"
-          (blur)="validateEmail()"
-          placeholder="Ingresa tu email"
-          [disabled]="isLoading"
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none placeholder-gray-400 disabled:bg-gray-100"
-          [class.border-red-500]="emailError"
-        />
-        <p *ngIf="emailError" class="text-red-500 text-sm mt-1">
-          Correo obligatorio
-        </p>
+          Entendido
+        </button>
       </div>
-
-      <!-- Agregando campo documento obligatorio -->
-      <div>
-        <label for="documento" class="block text-gray-700 font-medium mb-2"
-          >Documento de identidad</label
-        >
-        <input
-          type="text"
-          id="documento"
-          [(ngModel)]="documento"
-          name="documento"
-          (blur)="validateDocumento()"
-          placeholder="Tu documento"
-          [disabled]="isLoading"
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none placeholder-gray-400 disabled:bg-gray-100"
-          [class.border-red-500]="documentoError"
-        />
-        <p *ngIf="documentoError" class="text-red-500 text-sm mt-1">
-          El documento es obligatorio
-        </p>
-      </div>
-
-      <!-- Contraseña -->
-      <div>
-        <label for="password" class="block text-gray-700 font-medium mb-2"
-          >Contraseña</label
-        >
-        <input
-          type="password"
-          id="password"
-          [(ngModel)]="password"
-          name="password"
-          (blur)="validatePassword()"
-          placeholder="Ingresa tu contraseña"
-          [disabled]="isLoading"
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none placeholder-gray-400 disabled:bg-gray-100"
-          [class.border-red-500]="passwordError"
-        />
-        <p *ngIf="passwordError" class="text-red-500 text-sm mt-1">
-          La contraseña es obligatoria
-        </p>
-      </div>
-
-      <!-- Confirmar Contraseña -->
-      <div>
-        <label
-          for="confirmPassword"
-          class="block text-gray-700 font-medium mb-2"
-          >Confirmar Contraseña</label
-        >
-        <input
-          type="password"
-          id="confirmPassword"
-          [(ngModel)]="confirmPassword"
-          name="confirmPassword"
-          (blur)="validateConfirmPassword()"
-          placeholder="Repite tu contraseña"
-          [disabled]="isLoading"
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none placeholder-gray-400 disabled:bg-gray-100"
-          [class.border-red-500]="
-            confirmPasswordError || confirmPasswordMismatch
-          "
-        />
-        <p *ngIf="confirmPasswordError" class="text-red-500 text-sm mt-1">
-          Confirma tu contraseña
-        </p>
-        <p *ngIf="confirmPasswordMismatch" class="text-red-500 text-sm mt-1">
-          Las contraseñas no coinciden
-        </p>
-      </div>
-
-      <!-- Opcionales: teléfono y fecha de nacimiento -->
-      <div>
-        <label for="telefono" class="block text-gray-700 font-medium mb-2"
-          >Teléfono (opcional)</label
-        >
-        <input
-          type="tel"
-          id="telefono"
-          [(ngModel)]="telefono"
-          name="telefono"
-          placeholder="Opcional"
-          [disabled]="isLoading"
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none placeholder-gray-400 disabled:bg-gray-100"
-        />
-      </div>
-
-      <div>
-        <label
-          for="fechaNacimiento"
-          class="block text-gray-700 font-medium mb-2"
-          >Fecha de nacimiento (opcional)</label
-        >
-        <input
-          type="date"
-          id="fechaNacimiento"
-          [(ngModel)]="fechaNacimiento"
-          name="fechaNacimiento"
-          [disabled]="isLoading"
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none disabled:bg-gray-100"
-        />
-      </div>
-
-      <!-- Registrarse -->
-      <button
-        type="submit"
-        [disabled]="isLoading"
-        class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg font-semibold transition-colors cursor-pointer disabled:bg-blue-300 disabled:cursor-not-allowed flex items-center justify-center"
-      >
-        <span *ngIf="!isLoading">Registrarse</span>
-        <span *ngIf="isLoading" class="flex items-center">
-          <iconify-icon icon="svg-spinners:180-ring" width="24" height="24" />
-          Registrando...
-        </span>
-      </button>
-    </form>
-
-    <!-- Inicia sesión -->
-    <p class="text-center text-gray-600 mt-6">
-      ¿Ya tienes cuenta?
-      <a [routerLink]="['/login']" class="text-blue-600 hover:text-blue-800"
-        >Inicia sesión</a
-      >
-    </p>
-
-    <!-- Ir al inicio -->
-    <p class="text-center text-gray-500 mt-4">
-      <a
-        [routerLink]="['/']"
-        fragment="inicio"
-        class="text-blue-600 hover:text-blue-800"
-        >Ir al inicio</a
-      >
-    </p>
+    </div>
   </div>
 </section>
