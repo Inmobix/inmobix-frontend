@@ -14,12 +14,12 @@ export interface PropertyRequest {
   transactionType: string // SALE, RENT
   available: boolean // default true
   imageUrl?: string
-  userId?: number // Long en Java - ID del usuario propietario/agente
+  userId?: string // UUID en Java - ID del usuario propietario/agente
 }
 
 // Interfaz que coincide con PropertyResponse.java del backend
 export interface PropertyResponse {
-  id: number // Long en Java
+  id: string // UUID en Java
   title: string
   description: string
   address: string
@@ -38,7 +38,7 @@ export interface PropertyResponse {
   updatedAt: string // LocalDateTime en Java, se recibe como string ISO
 
   // Información del usuario propietario
-  userId?: number
+  userId?: string
   userName?: string
   userEmail?: string
   userPhone?: string
