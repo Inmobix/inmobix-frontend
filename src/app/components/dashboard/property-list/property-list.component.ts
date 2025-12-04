@@ -50,7 +50,7 @@ export class PropertyListComponent implements OnInit {
     });
   }
 
-  deleteProperty(id: number): void {
+  deleteProperty(id: string): void {
     Swal.fire({
       title: '¿Estás seguro?',
       text: 'Esta acción no se puede deshacer',
@@ -63,18 +63,42 @@ export class PropertyListComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.loading = true;
-        this.propertyService.deleteProperty(id).subscribe({
-          next: () => {
-            Swal.fire('Eliminado', 'La propiedad ha sido eliminada', 'success');
-            this.loadProperties();
-            this.loading = false;
-          },
-          error: (error) => {
-            Swal.fire('Error', 'No se pudo eliminar la propiedad', 'error');
-            this.loading = false;
-          },
-        });
+        const property = this.properties.find(p => p.id === id);
+
+        if (property && property.imageUrl) {
+          this.propertyService.deleteImage(property.imageUrl).subscribe({
+            next: () => this.executeDeleteProperty(id),
+            error: (err) => {
+              console.error('Error deleting image:', err);
+              // Proceed with property deletion even if image deletion fails
+              this.executeDeleteProperty(id);
+            }
+          });
+        } else {
+          this.executeDeleteProperty(id);
+        }
       }
     });
+  }
+
+  private executeDeleteProperty(id: string): void {
+    this.propertyService.deleteProperty(id).subscribe({
+      next: () => {
+        Swal.fire('Eliminado', 'La propiedad ha sido eliminada', 'success');
+        this.loadProperties();
+        this.loading = false;
+      },
+      error: (error) => {
+        Swal.fire('Error', 'No se pudo eliminar la propiedad', 'error');
+        this.loading = false;
+      },
+    });
+  }
+
+  onImageError(event: Event): void {
+    const target = event.target as HTMLImageElement;
+    if (target) {
+      target.src = 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1073&q=80';
+    }
   }
 }

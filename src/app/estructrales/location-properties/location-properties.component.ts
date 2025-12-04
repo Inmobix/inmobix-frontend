@@ -5,7 +5,7 @@ import { PropertyService } from "../../services/property.service"
 import { Property } from "../../models/property.model"
 
 interface DisplayProperty {
-  id: number
+  id: string
   title: string
   price: number
   rentType: string
@@ -81,7 +81,7 @@ export class LocationPropertiesComponent implements OnInit {
 
   private mapResponseToProperties(responses: Property[]): DisplayProperty[] {
     return responses.map((prop) => ({
-      id: prop.id || 0,
+      id: prop.id || '',
       title: prop.title,
       price: prop.price,
       rentType: prop.transactionType === "RENT" ? "Mes" : "Total",
