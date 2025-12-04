@@ -30,12 +30,14 @@ export class PropertyFormComponent implements OnInit {
     transactionType: "SALE",
     available: true,
     imageUrl: "",
-    userId: 0,
+    userId: '',
   };
 
   loading = false;
   isEditing = false;
-  editingPropertyId: number | null = null;
+  editingPropertyId: string | null = null;
+  selectedFile: File | null = null;
+  imagePreview: string | null = null;
 
   constructor(
     private propertyService: PropertyService,
@@ -46,36 +48,40 @@ export class PropertyFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
-      if (params['id']) {
+      const propertyId = params['id'];
+      if (propertyId) {
         this.isEditing = true;
-        this.editingPropertyId = +params['id'];
-        this.loadProperty(this.editingPropertyId);
+        this.editingPropertyId = propertyId;
+        this.loadProperty(propertyId);
       }
     });
   }
 
-  loadProperty(id: number): void {
+  loadProperty(id: string): void {
     this.loading = true;
     this.propertyService.getPropertyById(id).subscribe({
       next: (property) => {
-        this.propertyForm = {
-          title: property.title,
-          description: property.description,
-          address: property.address,
-          city: property.city,
-          state: property.state,
-          price: property.price,
-          area: property.area,
-          bedrooms: property.bedrooms,
-          bathrooms: property.bathrooms,
-          garages: property.garages,
-          propertyType: property.propertyType,
-          transactionType: property.transactionType,
-          available: property.available,
-          imageUrl: property.imageUrl || "",
-          userId: property.userId || 0,
-        };
-        this.loading = false;
+          this.propertyForm = {
+            title: property.title,
+            description: property.description,
+            address: property.address,
+            city: property.city,
+            state: property.state,
+            price: property.price,
+            area: property.area,
+            bedrooms: property.bedrooms,
+            bathrooms: property.bathrooms,
+            garages: property.garages,
+            propertyType: property.propertyType,
+            transactionType: property.transactionType,
+            available: property.available,
+            imageUrl: property.imageUrl || "",
+            userId: property.userId || '',
+          };
+          if (this.propertyForm.imageUrl) {
+            this.imagePreview = this.propertyForm.imageUrl;
+          }
+          this.loading = false;
       },
       error: (error) => {
         Swal.fire('Error', 'No se pudo cargar la propiedad', 'error');
@@ -84,9 +90,91 @@ export class PropertyFormComponent implements OnInit {
     });
   }
 
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      // Validate file type (optional)
+      if (!file.type.startsWith('public/images/')) {
+        Swal.fire('Error', 'Por favor selecciona un archivo de imagen válido', 'error');
+        return;
+      }
+
+      this.selectedFile = file;
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  removeImage(): void {
+    if (this.propertyForm.imageUrl) {
+      Swal.fire({
+        title: '¿Estás seguro?',
+        text: "Se eliminará la imagen actual",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+           this.propertyService.deleteImage(this.propertyForm.imageUrl!).subscribe({
+             next: () => {
+               this.clearImageState();
+               Swal.fire('Eliminado', 'La imagen ha sido eliminada', 'success');
+             },
+             error: () => {
+               // Even if backend fails, we might want to clear it locally or show error
+               // For now, let's assume we just clear it locally if it fails or if it's just a path update
+               this.clearImageState();
+               Swal.fire('Info', 'Imagen removida de la vista', 'info');
+             }
+           });
+        }
+      });
+    } else {
+      this.clearImageState();
+    }
+  }
+
+  private clearImageState(): void {
+    this.selectedFile = null;
+    this.imagePreview = null;
+    this.propertyForm.imageUrl = "";
+  }
+
   saveProperty(): void {
+    // Validate required fields manually or rely on form valid state if passed
+    if (!this.propertyForm.title || !this.propertyForm.city || !this.propertyForm.price) {
+      Swal.fire('Error', 'Por favor completa los campos obligatorios (Título, Precio, Ciudad)', 'error');
+      return;
+    }
+
     this.loading = true;
 
+    if (this.selectedFile) {
+      this.propertyService.uploadImage(this.selectedFile).subscribe({
+        next: (response) => {
+          this.propertyForm.imageUrl = response.imageUrl;
+          this.submitPropertyData();
+        },
+        error: (error) => {
+          console.error('Error uploading image:', error);
+          const errorMessage = error.error?.message || error.message || 'Error desconocido al subir la imagen';
+          Swal.fire('Error', `Error al subir la imagen: ${errorMessage}`, 'error');
+          this.loading = false;
+        }
+      });
+    } else {
+      this.submitPropertyData();
+    }
+  }
+
+  submitPropertyData(): void {
     if (this.isEditing && this.editingPropertyId) {
       this.propertyService.updateProperty(this.editingPropertyId, this.propertyForm).subscribe({
         next: () => {
@@ -102,7 +190,7 @@ export class PropertyFormComponent implements OnInit {
       // Assign current user ID
       const userId = this.authService.getUserId();
       if (userId) {
-        this.propertyForm.userId = Number(userId);
+        this.propertyForm.userId = userId;
       }
 
       this.propertyService.createProperty(this.propertyForm).subscribe({
